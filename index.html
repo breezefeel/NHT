@@ -20,6 +20,7 @@
             font-family: 'Noto Sans KR', sans-serif;
             background-color: #F9F9F7; /* Soft background */
             color: #333;
+            scroll-behavior: smooth;
         }
         
         /* Typography for Titles and Highlights */
@@ -31,6 +32,7 @@
         :root {
             --primary-green: #0F4C3A; /* Deep Green for Branding */
             --accent-gold: #C5A065;   /* Gold/Brown Accent */
+            --light-bg: #F9F9F7;
         }
 
         /* Navigation Bar Styling */
@@ -76,20 +78,33 @@
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        /* Sub-tab Styling */
+        
+        /* 제목 및 강조를 위한 서체 */
+        .serif-font {
+            font-family: 'Nanum Myeongjo', serif;
+        }
+        
+        /* 색상 팔레트 */
+        .bg-green-700 { background-color: #276749; } /* 짙은 녹색 */
+        .text-green-700 { color: #276749; }
+        .hover\:bg-green-800:hover { background-color: #22543d; }
+        
+        /* --- 서브 메뉴 활성화 상태 (박스 강조로 수정) --- */
         .sub-tab-btn {
-            border-bottom: 2px solid transparent;
-            color: #666;
-            transition: all 0.2s;
+            /* 기본 스타일: 투명 배경, 부드러운 전환 */
+            background-color: transparent;
+            border: 1px solid transparent; 
+            transition: all 0.2s ease-in-out;
+            font-weight: 500; /* Medium weight */
+            /* 테일윈드에서 rounded-lg, text-gray-600, hover:text-[#0F4C3A]가 적용됨 */
         }
-        .sub-tab-btn:hover {
-            color: var(--primary-green);
-        }
-        .sub-tab-btn.active {
-            border-bottom: 3px solid var(--primary-green);
-            color: var(--primary-green);
-            font-weight: 700;
+        
+        /* JavaScript로 적용될 활성 클래스: 박스 테두리 강조 */
+        .sub-tab-btn.active-sub-tab {
+            color: #0F4C3A; /* 진한 녹색 텍스트 */
+            background-color: white; /* 흰색 배경 */
+            border-color: #0F4C3A; /* 진한 녹색 테두리 */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* 옅은 그림자 */
         }
         
         /* Section Header Title Style */
@@ -109,6 +124,9 @@
             background-color: var(--accent-gold);
             border-radius: 9999px;
         }
+        .content-section {
+            scroll-margin-top: calc(5rem + 110px); /* h-20 + sub-menu 높이 + 여백 */
+        }
     </style>
 </head>
 <body>
@@ -119,30 +137,24 @@
             
             <!-- Logo & Title -->
             <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="switchPage('about')">
-                <!-- Replace with actual Logo image URL if available -->
                 <img src="https://breezefeel.github.io/NHT/자연치유관광포럼 로고.png" 
                      alt="자연치유관광포럼 로고" 
-                     class="h-12 w-auto object-contain">
+                     class="h-10 md:h-12 w-auto object-contain">
                 <div class="hidden sm:block">
                     <span class="block text-xl font-extrabold text-gray-800 leading-none serif-font" style="color: var(--primary-green);">자연치유관광포럼</span>
                     <span class="block text-xs text-gray-500 tracking-wider">Natural Healing Tourism Forum</span>
                 </div>
             </div>
 
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex space-x-12">
-                <button onclick="switchPage('about')" class="nav-item text-lg py-2" id="nav-about">포럼 소개</button>
-                <button onclick="switchPage('forum')" class="nav-item text-lg py-2" id="nav-forum">힐링포럼</button>
-                <button onclick="switchPage('story')" class="nav-item text-lg py-2" id="nav-story">힐링스토리</button>
-                <button onclick="switchPage('contact')" class="nav-item text-lg py-2" id="nav-contact">연락처</button>
+            <!-- Desktop & Mobile Menu (Scrollable) -->
+            <!-- pb-3 추가: 밑줄이 잘리지 않도록 하단 여백 확보 -->
+            <div class="flex space-x-6 md:space-x-12 overflow-x-auto whitespace-nowrap pl-4 scrollbar-hide pb-3 items-center h-full pt-3">
+                <button onclick="switchPage('about')" class="nav-item text-base md:text-lg py-1 flex-shrink-0" id="nav-about">포럼 소개</button>
+                <button onclick="switchPage('forum')" class="nav-item text-base md:text-lg py-1 flex-shrink-0" id="nav-forum">힐링포럼</button>
+                <button onclick="switchPage('story')" class="nav-item text-base md:text-lg py-1 flex-shrink-0" id="nav-story">힐링스토리</button>
+                <button onclick="switchPage('contact')" class="nav-item text-base md:text-lg py-1 flex-shrink-0" id="nav-contact">연락처</button>
             </div>
 
-            <!-- Mobile Menu Button (Placeholder) -->
-            <div class="md:hidden">
-                <button class="text-gray-600 focus:outline-none p-2 rounded-lg hover:bg-gray-100 transition">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
         </div>
     </nav>
 
@@ -159,89 +171,60 @@
                 <p class="text-lg text-gray-600">자연과 사람이 하나되는 치유의 길을 엽니다.</p>
             </div>
 
-            <!-- Sub-navigation Tabs (Updated) -->
-            <div class="flex justify-center flex-wrap gap-x-8 gap-y-3 mb-12 border-b border-gray-200">
-                <button onclick="switchSubTab('founding')" class="sub-tab-btn active pb-3 px-4 text-base md:text-lg" id="tab-founding">설립에 즈음하여</button>
-                <button onclick="switchSubTab('greeting')" class="sub-tab-btn pb-3 px-4 text-base md:text-lg" id="tab-greeting">이사장 인사말</button>
-                <button onclick="switchSubTab('experts')" class="sub-tab-btn pb-3 px-4 text-base md:text-lg" id="tab-experts">이사/전문위원</button>
-                <button onclick="switchSubTab('history')" class="sub-tab-btn pb-3 px-4 text-base md:text-lg" id="tab-history">연혁</button>
-                <button onclick="switchSubTab('statute')" class="sub-tab-btn pb-3 px-4 text-base md:text-lg" id="tab-statute">정관</button>
-                <button onclick="switchSubTab('participants')" class="sub-tab-btn pb-3 px-4 text-base md:text-lg" id="tab-participants">참여기관</button><!-- New Tab -->
+            <div id="sub-menu-nav" class="sticky top-20 z-40 bg-[#F9F9F7]/95 backdrop-blur py-4 grid grid-cols-3 justify-items-center gap-y-3 md:flex md:justify-center md:flex-wrap md:gap-x-8 mb-12 border-b border-gray-200">
+                <!-- p-2 대신 py-2 px-3과 rounded-lg를 추가하여 박스 스타일을 위한 공간 확보 -->
+                <button data-target="content-founding" onclick="scrollToSection('content-founding')" class="sub-tab-btn rounded-lg py-2 px-3 text-sm md:text-lg text-gray-600 hover:text-[#0F4C3A] transition-all">설립에 즈음하여</button>
+                <button data-target="content-greeting" onclick="scrollToSection('content-greeting')" class="sub-tab-btn rounded-lg py-2 px-3 text-sm md:text-lg text-gray-600 hover:text-[#0F4C3A] transition-all">이사장 인사말</button>
+                <button data-target="content-experts" onclick="scrollToSection('content-experts')" class="sub-tab-btn rounded-lg py-2 px-3 text-sm md:text-lg text-gray-600 hover:text-[#0F4C3A] transition-all">이사/전문위원</button>
+                <button data-target="content-history" onclick="scrollToSection('content-history')" class="sub-tab-btn rounded-lg py-2 px-3 text-sm md:text-lg text-gray-600 hover:text-[#0F4C3A] transition-all">연혁</button>
+                <button data-target="content-statute" onclick="scrollToSection('content-statute')" class="sub-tab-btn rounded-lg py-2 px-3 text-sm md:text-lg text-gray-600 hover:text-[#0F4C3A] transition-all">정관</button>
+                <button data-target="content-participants" onclick="scrollToSection('content-participants')" class="sub-tab-btn rounded-lg py-2 px-3 text-sm md:text-lg text-gray-600 hover:text-[#0F4C3A] transition-all">참여기관</button>
             </div>
 
             <div class="bg-white p-6 md:p-10 rounded-xl shadow-xl border border-gray-100 min-h-[700px]">
                 
                 <!-- 1. 설립에 즈음하여 -->
-                <div id="content-founding" class="sub-content">
-                    
-                    <h3 class="text-3xl font-bold text-gray-800 mb-10 border-b pb-4 text-center serif-font">사단법인 자연치유관광포럼<br>설립의 의미</h3>
-
-                    <!-- 이미지 영역 (상단 중앙 배치, 개선된 스타일) -->
+                <div class="bg-white p-6 md:p-10 rounded-xl shadow-xl border border-gray-100">
+                
+                <div id="content-founding" class="sub-content scroll-mt-40">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-10 border-b pb-4 text-center serif-font">사) 자연치유관광포럼<br>설립의 의미</h3>
                     <div class="flex flex-col items-center mb-12">
                         <div class="rounded-xl overflow-hidden shadow-2xl border-4 border-white bg-white w-full max-w-sm md:max-w-xs transform transition duration-500 hover:shadow-green-300/50">
-                            <img src="https://breezefeel.github.io/NHT/전세일 이사장님.gif" 
-                                alt="전세일 이사장님" 
-                                class="w-full h-auto object-cover rounded-lg">
+                            <img src="https://breezefeel.github.io/NHT/전세일 이사장님.gif" alt="전세일 이사장님" class="w-full h-auto object-cover rounded-lg">
                         </div>
                         <div class="p-4 text-center mt-4">
                             <p class="text-2xl font-bold serif-font" style="color: var(--primary-green);">초대 이사장 전세일</p>
                             <p class="text-base text-gray-500 mt-1">통합의학의 선구자 · 연세대학교 명예교수</p>
                         </div>
                     </div>
-
-                    <!-- 텍스트 내용 -->
                     <div class="text-gray-700 leading-8 text-justify space-y-7 max-w-4xl mx-auto text-base">
-                        <p>
-                            본 포럼은 지난 2013년 5월 9일 문화체육관광부 국제관광서비스과로부터 <strong class="text-lg font-extrabold" style="color: var(--primary-green);">'사단법인 자연치유관광포럼'</strong>으로 법인 인가를 받았습니다.
-                        </p>
-
-                        <p>
-                            의료관광과 함께 우리의 앞선 생활문화를 미래 건강산업의 핵심 동력으로 만들기 위해, 힐링 콘텐츠, 커뮤니티, 교육 등의 개발과 지원을 통해 힐링투어 기반을 조성합니다. 이는 해외 관광객 유치는 물론, 고령화 사회에서 저비용 고효율의 건강한 생활문화 창달에 기여할 것으로 기대됩니다.
-                        </p>
-
+                        <p>본 포럼은 지난 2013년 5월 9일 문화체육관광부 국제관광서비스과로부터 <strong class="text-lg font-extrabold" style="color: var(--primary-green);">'사단법인 자연치유관광포럼'</strong>으로 법인 인가를 받았습니다.</p>
+                        <p>의료관광과 함께 우리의 앞선 생활문화를 미래 건강산업의 핵심 동력으로 만들기 위해, 힐링 콘텐츠, 커뮤니티, 교육 등의 개발과 지원을 통해 힐링투어 기반을 조성합니다. 이는 해외 관광객 유치는 물론, 고령화 사회에서 저비용 고효율의 건강한 생활문화 창달에 기여할 것으로 기대됩니다.</p>
                         <div class="bg-[#E8F3EB] p-6 md:p-8 rounded-xl border-l-4" style="border-color: var(--accent-gold);">
-                            <p class="text-lg italic font-medium text-gray-800">
-                                "자연과 치유는 우리 선조들의 천인합일 자연주의에서 유래되어, 본성의 회복을 스스로 찾아가는 생활방식 속에서 우러나옵니다. ‘사람이 자연이다’라는 자연과의 조화와 회복이 곧 치유라는 결과물을 만들어 냅니다."
-                            </p>
+                            <p class="text-lg italic font-medium text-gray-800">"자연과 치유는 우리 선조들의 천인합일 자연주의에서 유래되어, 본성의 회복을 스스로 찾아가는 생활방식 속에서 우러나옵니다. ‘사람이 자연이다’라는 자연과의 조화와 회복이 곧 치유라는 결과물을 만들어 냅니다."</p>
                             <p class="text-sm text-right text-gray-600 mt-3">- 전세일 이사장</p>
                         </div>
-
-                        <p>
-                            이러한 자연의 이치를 분별하고 순응하는 삶을 힐링투어라는 잘 정비된 수단을 통해 세계인에게 알리고, 한국을 다시 찾아오게 만드는 새로운 한류문화를 형성할 수 있으리라 봅니다. 자연치유에 대한 개념과 정체성을 명확히 하여 생활문화를 재정비하고 콘텐츠를 재구성함으로써 <strong class="font-bold">“다시 찾고 싶은 한국, 생활문화 선진국”</strong>을 만들고자 합니다.
-                        </p>
-
-                        <p>
-                            현재 힐링 바람이 불고 있지만, 구체적인 사업화와 산업화를 위한 프로그램이나 프로토콜이 정비되어 있지 않아 혼란스러운 상황입니다. 본 포럼은 한민족의 인류시원 장자문화(복본, 다물, 풍유, 화랑으로 이어진 천인합일 문화)를 회복하여 세계인들에게 치유 감성을 보여주고자 합니다.
-                        </p>
-
-                        <p class="font-bold text-lg text-center py-4" style="color: var(--primary-green);">
-                            "힐링투어와 힐링 생태계를 통하여 세계인이 수긍하는 <span class="text-xl">‘자연치유 대한민국’</span>을 드러나게 할 수 있기를 기대합니다."
-                        </p>
-
-                        <p class="text-right text-gray-500 pt-6 border-t border-gray-100 text-sm">
-                            사) 자연치유관광포럼 초대 이사장 전세일 드림
-                        </p>
+                        <p>이러한 자연의 이치를 분별하고 순응하는 삶을 힐링투어라는 잘 정비된 수단을 통해 세계인에게 알리고, 한국을 다시 찾아오게 만드는 새로운 한류문화를 형성할 수 있으리라 봅니다. 자연치유에 대한 개념과 정체성을 명확히 하여 생활문화를 재정비하고 콘텐츠를 재구성함으로써 <strong class="font-bold">“다시 찾고 싶은 한국, 생활문화 선진국”</strong>을 만들고자 합니다.</p>
+                        <p>현재 힐링 바람이 불고 있지만, 구체적인 사업화와 산업화를 위한 프로그램이나 프로토콜이 정비되어 있지 않아 혼란스러운 상황입니다. 본 포럼은 한민족의 인류시원 장자문화(복본, 다물, 풍유, 화랑으로 이어진 천인합일 문화)를 회복하여 세계인들에게 치유 감성을 보여주고자 합니다.</p>
+                        <p class="font-bold text-lg text-center py-4" style="color: var(--primary-green);">"힐링투어와 힐링 생태계를 통하여 세계인이 수긍하는 <span class="text-xl">‘자연치유 대한민국’</span>을 드러나게 할 수 있기를 기대합니다."</p>
+                        <p class="text-right text-gray-500 pt-6 border-t border-gray-100 text-sm">사) 자연치유관광포럼 초대 이사장 전세일 드림</p>
                     </div>
                 </div>
 
                 <!-- 2. 이사장 인사말 -->
-                <div id="content-greeting" class="sub-content hidden">
+                <hr class="my-16 border-gray-200">
+
+                <div id="content-greeting" class="sub-content scroll-mt-40">
                     <div class="max-w-4xl mx-auto text-center py-8">
-                        <div class="relative mb-10">
-                            <i class="fas fa-quote-left text-7xl absolute left-1/2 transform -translate-x-1/2 -top-10 text-gray-100 opacity-70"></i>
+                        <div class="relative mb-10">                            
                             <h3 class="text-4xl font-extrabold my-8 serif-font" style="color: var(--primary-green);">
                                 치유는 기술이 아닌<br>삶의 방식으로 찾아옵니다.
                             </h3>
                             <p class="text-xl text-gray-700 font-medium">- 사단법인 자연치유관광포럼 이사장 전세일 -</p>
                         </div>
-                        
-                        <!-- 이사장 사진 (인사말 섹션용) -->
                         <div class="flex justify-center mb-8">
-                            <img src="https://breezefeel.github.io/NHT/전세일 원장님.jpg" 
-                                alt="전세일 이사장님" 
-                                class="w-64 h-auto rounded-xl shadow-lg border border-gray-200 object-cover">
+                            <img src="https://breezefeel.github.io/NHT/전세일 원장님.jpg" alt="전세일 이사장님" class="w-64 h-auto rounded-xl shadow-lg border border-gray-200 object-cover">
                         </div>
-
                         <p class="text-gray-700 leading-9 mb-8 text-left text-lg bg-gray-50 p-6 rounded-lg border">
                             <strong style="color: var(--primary-green);">존경하는 자연치유관광포럼 가족 및 국민 여러분께,</strong><br><br>
                             자연은 늘 우리 곁에 있었지만, 우리는 그 치유의 잠재력을 잊고 바쁜 일상에 매몰되어 살아왔습니다. 저는 수십 년간 통합의학의 길을 걸으며 산과 물, 햇살과 바람, 그리고 지역의 고유 자원이 단순한 휴양이 아닌 삶의 전환점이 될 수 있다는 진실을 깨달았습니다.<br><br>
@@ -252,11 +235,12 @@
                 </div>
 
                 <!-- 3. 이사/전문위원 -->
-                <div id="content-experts" class="sub-content hidden">
+                <hr class="my-16 border-gray-200">
+
+                <div id="content-experts" class="sub-content scroll-mt-40">
                     <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center serif-font">포럼을 이끄는 주요 인사</h3>
                     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <!-- Expert Card 1 (E.g., Chairman Jun Seil) -->
-                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300">
+                         <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300">
                             <div class="w-28 h-28 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden border-2 border-white shadow-inner">
                                 <img src="https://breezefeel.github.io/NHT/전세일 원장님.jpg" alt="전세일 이사장님" class="w-full h-full object-cover">
                             </div>
@@ -264,41 +248,30 @@
                             <p class="text-base font-semibold mb-3" style="color: var(--primary-green);">통합의학 권위자 / 연세대학교 명예교수</p>
                             <p class="text-sm text-gray-600">現 사단법인 자연치유관광포럼 이사장<br>前 연세대 세브란스병원 재활병원장</p>
                         </div>
-                        
-                        <!-- Expert Card 2 (E.g., Director Park Junkyu) -->
                         <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300">
                             <div class="w-28 h-28 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden border-2 border-white shadow-inner">
-                                <!-- Placeholder image for Park Junkyu -->
                                 <img src="https://breezefeel.github.io/NHT/프로필-22_웹용.jpg" alt="박준규 이사" class="w-full h-full object-cover">
                             </div>
                             <h4 class="text-xl font-bold mb-1 text-gray-800">박준규 이사</h4>
                             <p class="text-base font-semibold mb-3" style="color: var(--primary-green);">미국 카이로프랙틱 닥터 (D.C.)</p>
                             <p class="text-sm text-gray-600">(주)힐링트리 법인 대표<br>IFC 국제얼굴교정학회 학회장</p>
                         </div>
-
-                        <!-- Expert Card 3 (E.g., Director Park Junkyu) -->
                         <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300">
                             <div class="w-28 h-28 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden border-2 border-white shadow-inner">
-                                <!-- Placeholder image for Park Junkyu -->
-                                <img src="https://breezefeel.github.io/NHT/손민정 이사님.png" alt="박준규 이사" class="w-full h-full object-cover">
+                                <img src="https://breezefeel.github.io/NHT/손민정 이사님.png" alt="손민정 이사" class="w-full h-full object-cover">
                             </div>
                             <h4 class="text-xl font-bold mb-1 text-gray-800">손민정 이사</h4>
                             <p class="text-base font-semibold mb-3" style="color: var(--primary-green);">미국 카이로프랙틱 닥터 (D.C.)</p>
                             <p class="text-sm text-gray-600">(협)희망더하기 사회적협동조합<br>IFC 국제얼굴교정학회 학회장</p>
                         </div>
-
-                        <!-- Expert Card 3 (E.g., Director Park Junkyu) -->
                         <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300">
                             <div class="w-28 h-28 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden border-2 border-white shadow-inner">
-                                <!-- Placeholder image for Park Junkyu -->
-                                <img src="https://breezefeel.github.io/NHT/손태경 이사님.jpg" alt="박준규 이사" class="w-full h-full object-cover">
+                                <img src="https://breezefeel.github.io/NHT/손태경 이사님.jpg" alt="손태경 이사" class="w-full h-full object-cover">
                             </div>
                             <h4 class="text-xl font-bold mb-1 text-gray-800">손태경 이사</h4>
                             <p class="text-base font-semibold mb-3" style="color: var(--primary-green);">미국 카이로프랙틱 닥터 (D.C.)</p>
                             <p class="text-sm text-gray-600">니시 의학<br>IFC 국제얼굴교정학회 학회장</p>
                         </div>
-
-                        <!-- Advisory Board Placeholder -->
                         <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300 flex flex-col justify-center items-center">
                             <div class="text-gray-400 mb-4"><i class="fas fa-users-cog text-5xl"></i></div>
                             <h4 class="text-xl font-bold text-gray-800 mb-2">이사 및 전문위원단</h4>
@@ -308,7 +281,9 @@
                 </div>
 
                 <!-- 4. 연혁 -->
-                <div id="content-history" class="sub-content hidden">
+                <hr class="my-16 border-gray-200">
+
+                <div id="content-history" class="sub-content scroll-mt-40">
                     <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center serif-font">포럼 주요 활동 연혁</h3>
                     <div class="max-w-4xl mx-auto border-l-4 pl-8 space-y-12 relative ml-4 md:ml-10" style="border-color: var(--primary-green);">
                         
@@ -401,9 +376,10 @@
                 </div>
                 
                  <!-- 5. 정관 (수정됨) -->
-                <div id="content-statute" class="sub-content hidden">
+                <hr class="my-16 border-gray-200">
+
+                <div id="content-statute" class="sub-content scroll-mt-40">
                     <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center serif-font">사단법인 자연치유관광포럼 정관</h3>
-                    
                     <div class="max-w-4xl mx-auto space-y-10 text-gray-700 leading-relaxed">
                         
                         <!-- Chapter 1 -->
@@ -479,27 +455,30 @@
                 </div>
 
                 <!-- 6. 참여기관 (New Content) -->
-                <div id="content-participants" class="sub-content hidden">
+                <hr class="my-16 border-gray-200">
+
+                <div id="content-participants" class="sub-content scroll-mt-40">
                     <h3 class="text-3xl font-bold text-gray-800 mb-4 text-center serif-font">사단법인 자연치유관광포럼 참여기관</h3>
                     <p class="text-center text-gray-500 mb-10">2016. 12. 26 기준</p>
                     
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 shadow-lg rounded-xl overflow-hidden">
+
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider w-12 sm:w-16">
+                                    <th class="px-1 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider w-10">
                                         No.
                                     </th>
-                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider w-24 sm:w-32">
+                                    <th class="px-2 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider w-20">
                                         이름
                                     </th>
-                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                    <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider">
                                         소속 기관/직책
                                     </th>
-                                    <th class="hidden sm:table-cell px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider w-20">
+                                    <th class="px-2 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider w-16">
                                         분류
                                     </th>
-                                    <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider w-16">
+                                    <th class="hidden sm:table-cell px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider w-20">
                                         참여 상태
                                     </th>
                                 </tr>
@@ -508,227 +487,227 @@
                                 
                                 <!-- Data Row 1 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">1</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">박권흠</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">한국차인연합회(회장) / 전우벽(사무국장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연합회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">1</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">박권흠</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">한국차인연합회(회장) / 전우벽(사무국장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">연합회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 2 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">2</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">한세영</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">한국서봉경혈지압학회(학회장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">학회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">2</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">한세영</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">한국서봉경혈지압학회(학회장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">학회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 3 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">3</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">최현임</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">한국건강교육협회(협회장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">3</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">최현임</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">한국건강교육협회(협회장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 4 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">4</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김형준</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">한국웃음치료전문협회(협회장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">4</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김형준</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">한국웃음치료전문협회(협회장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 5 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">5</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이찬</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">세계태극권연맹(부주석)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연합회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">5</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이찬</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">세계태극권연맹(부주석)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">연합회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 6 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">6</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">장석중</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">푸드테라피연구소(소장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">6</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">장석중</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">푸드테라피연구소(소장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 7 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">7</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">박선우</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">청운차문화교육원(원장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">7</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">박선우</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">청운차문화교육원(원장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 8 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">8</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">유정룡</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">PBEN효소과학연구소(소장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">8</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">유정룡</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">PBEN효소과학연구소(소장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 9 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">9</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이경남</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">명상문화연구원(원장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">9</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이경남</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">명상문화연구원(원장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 10 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">10</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">류정숙</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">예은 다례원(원장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">10</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">류정숙</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">예은 다례원(원장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 11 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">11</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">전세일</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">CHA의과학대학교 통합의학대학원(원장) / 국제자연치유연맹(총재)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">11</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">전세일</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">CHA의과학대학교 통합의학대학원(원장) / 국제자연치유연맹(총재)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 12 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">12</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">신경원</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">메디컬요가협회(협회장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">12</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">신경원</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">메디컬요가협회(협회장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 13 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">13</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이거룡</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">선문대학교 통합의학대학원(원장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">13</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이거룡</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">선문대학교 통합의학대학원(원장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 14 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">14</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">하헌주</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">주)하헌주온열건강과학협회장</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">14</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">하헌주</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">주)하헌주온열건강과학협회장</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 15 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">15</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">임병식</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">국제한국임종협회(협회장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">15</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">임병식</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">국제한국임종협회(협회장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 16 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">16</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">조성하</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">동아일보 (편집국 부국장 여행전문기자)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">언론</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">16</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">조성하</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">동아일보 (편집국 부국장 여행전문기자)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">언론</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 17 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">17</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김재춘</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">자연요법사랑지기(원장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연합회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">17</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김재춘</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">자연요법사랑지기(원장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">연합회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 18 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">18</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이소영</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">명지병원 예술치유센터(센터장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">센터</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">18</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이소영</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">명지병원 예술치유센터(센터장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">센터</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 19 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">19</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">기태섭</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">한국자연치유교육협회(협회장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-yellow-600">진행중</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">19</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">기태섭</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">한국자연치유교육협회(협회장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-yellow-600">진행중</td>
                                 </tr>
                                 <!-- Data Row 20 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">20</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">서범구</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">EM생명과학연구원(원장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">20</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">서범구</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">EM생명과학연구원(원장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 21 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">21</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">정광조</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">대전대 보건스포츠대학원(원장) / 통합치유사협회 (협회장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">21</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">정광조</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">대전대 보건스포츠대학원(원장) / 통합치유사협회 (협회장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 22 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">22</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김성원</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">한국치유요가협회(협회장) / 진안에코에듀아토피센터(센터장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">22</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김성원</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">한국치유요가협회(협회장) / 진안에코에듀아토피센터(센터장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 23 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">23</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김세광</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">장신대 자연치유선교대학원(원장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">23</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김세광</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">장신대 자연치유선교대학원(원장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 24 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">24</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">정강주</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">한국요가문화협회(협회장)</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">24</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">정강주</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">한국요가문화협회(협회장)</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 25 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">25</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이충직</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">(재) 한국글로벌재단</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">여행</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">25</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이충직</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">(재) 한국글로벌재단</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">여행</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 26 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">26</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">민명원</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">서귀포시 관광협의회</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">관광</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">26</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">민명원</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">서귀포시 관광협의회</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">관광</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                                 <!-- Data Row 27 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">27</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이한철</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">전남관광협회</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">관광</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">27</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이한철</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">전남관광협회</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">관광</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
                                 </tr>
                                 <!-- Data Row 28 -->
                                 <tr>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">28</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김종례</td>
-                                    <td class="px-6 py-3 text-sm text-gray-600">국제 온열테라피협회장</td>
-                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">28</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김종례</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">국제 온열테라피협회장</td>
+                                    <td class="px-2 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="hidden sm:table-cell px-3 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -995,7 +974,7 @@
         </div>
     </footer>
 
-    
+        
     <script>
         // Main Page Switching
         function switchPage(pageName) {
@@ -1022,45 +1001,93 @@
             if (targetNav) {
                 targetNav.classList.add('active');
             }
-
-            // Special handling for 'about' page to ensure the correct sub-tab is loaded
-            if (pageName === 'about') {
-                // Only switch sub-tab if the page was previously inactive or being initialized
-                switchSubTab('founding');
-            }
+            
+            // 페이지 전환 시 최상단으로 이동
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // 페이지 전환 시 첫 번째 서브메뉴 활성화
+            setTimeout(() => {
+                const firstSubTab = document.querySelector('.sub-tab-btn');
+                if (firstSubTab && pageName === 'about') {
+                    firstSubTab.classList.add('active-sub-tab');
+                }
+            }, 100);
         }
 
-        // Sub-tab Switching (About Page)
-        function switchSubTab(tabName) {
-            // Update Tab Active State
-            document.querySelectorAll('.sub-tab-btn').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            const targetTab = document.getElementById('tab-' + tabName);
-            if (targetTab) {
-                targetTab.classList.add('active');
-            }
-
-            // Show Content
-            document.querySelectorAll('.sub-content').forEach(el => {
-                el.classList.add('hidden');
-            });
-            
-            const targetContent = document.getElementById('content-' + tabName);
-            if (targetContent) {
-                targetContent.classList.remove('hidden');
+        // Sub-tab Scrolling
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                // 모든 서브 탭 버튼에서 active 클래스 제거
+                document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+                    btn.classList.remove('active-sub-tab');
+                });
+                
+                // 클릭한 버튼에 active 클래스 추가
+                const clickedButton = document.querySelector(`[data-target="${sectionId}"]`);
+                if (clickedButton) {
+                    clickedButton.classList.add('active-sub-tab');
+                }
+                
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
         // Initialize: Set '포럼 소개' as the default active page on load
         document.addEventListener('DOMContentLoaded', () => {
             switchPage('about'); 
+            
+            // ===== 스크롤 시 서브메뉴 자동 활성화 =====
+            const observer = new IntersectionObserver((entries) => {
+                // 가장 위에 있는(가장 많이 보이는) 섹션 찾기
+                let topEntry = null;
+                let topPosition = Infinity;
+                
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const rect = entry.target.getBoundingClientRect();
+                        if (rect.top < topPosition) {
+                            topPosition = rect.top;
+                            topEntry = entry;
+                        }
+                    }
+                });
+                
+                // 가장 위에 있는 섹션의 버튼만 활성화
+                if (topEntry) {
+                    const sectionId = topEntry.target.id;
+                    
+                    // 모든 서브 탭 버튼에서 active 클래스 제거
+                    document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+                        btn.classList.remove('active-sub-tab');
+                    });
+                    
+                    // 현재 보이는 섹션에 해당하는 버튼에 active 클래스 추가
+                    const activeButton = document.querySelector(`[data-target="${sectionId}"]`);
+                    if (activeButton) {
+                        activeButton.classList.add('active-sub-tab');
+                    }
+                }
+            }, {
+                threshold: [0, 0.1, 0.2, 0.3, 0.5],
+                rootMargin: '-150px 0px -40% 0px'
+            });
+
+            // 모든 sub-content 클래스를 가진 섹션 관찰
+            document.querySelectorAll('.sub-content').forEach(section => {
+                observer.observe(section);
+            });
+            
+            // 페이지 로드 시 첫 번째 서브메뉴 활성화
+            setTimeout(() => {
+                const firstSubTab = document.querySelector('.sub-tab-btn');
+                if (firstSubTab) {
+                    firstSubTab.classList.add('active-sub-tab');
+                }
+            }, 200);
         });
 
         function sendEmail(event) {
-            // 폼의 기본 제출 동작을 막습니다.
             event.preventDefault();
 
             const name = document.getElementById('name-input').value;
@@ -1068,34 +1095,27 @@
             const message = document.getElementById('message-input').value;
             const statusElement = document.getElementById('email-status');
 
-            // 입력 필드가 비어 있는지 다시 한번 확인
             if (!name || !email || !message) {
-                // 비어있는 필드가 있다면 사용자에게 알리고 함수 종료
                 console.error("Please fill in all required fields.");
                 return; 
             }
 
-            // 이메일 본문 내용 포맷
             const bodyContent = 
                 "성함: " + name + "\n" +
                 "이메일 주소: " + email + "\n\n" +
                 "문의 내용:\n" + message;
 
-            // subject는 문의 내용의 첫 부분을 사용합니다.
             const subject = "온라인 문의: " + message.substring(0, 30) + (message.length > 30 ? '...' : '');
 
             const mailtoLink = "mailto:tda911@naver.com" + 
                             "?subject=" + encodeURIComponent(subject) + 
                             "&body=" + encodeURIComponent(bodyContent);
 
-            // [수정된 부분]: window.open 대신 window.location.href를 사용하여 현재 창에서 mailto 링크 실행을 시도
             window.location.href = mailtoLink;
 
-            // 알림 메시지 표시 (메일 클라이언트 실행 여부와 무관하게 사용자에게 안내)
             statusElement.style.opacity = '1';
             statusElement.classList.add('show');
             
-            // 5초 후 알림 메시지를 숨깁니다.
             setTimeout(() => {
                 statusElement.style.opacity = '0';
                 statusElement.classList.remove('show');
