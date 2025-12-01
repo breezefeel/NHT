@@ -3,507 +3,1104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사단법인 자연치유관광포럼 - 공식 홈페이지</title>
+    <title>사단법인 자연치유관광포럼</title>
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font: Noto Sans KR (for readability) -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Fonts: Noto Sans KR (Korean), Nanum Myeongjo (Serif/Title) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
+        /* Base Styles */
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f7f9fb;
+            background-color: #F9F9F7; /* Soft background */
             color: #333;
         }
-        /* Custom Colors based on Nature theme */
-        .color-primary { color: #0b4f3b; }
-        .bg-primary { background-color: #0b4f3b; }
-        .bg-secondary { background-color: #e9f5e9; }
-        .color-accent { color: #c2b280; }
-        .border-accent { border-color: #c2b280; }
+        
+        /* Typography for Titles and Highlights */
+        .serif-font {
+            font-family: 'Nanum Myeongjo', serif;
+        }
+        
+        /* Color Palette */
+        :root {
+            --primary-green: #0F4C3A; /* Deep Green for Branding */
+            --accent-gold: #C5A065;   /* Gold/Brown Accent */
+        }
 
-        /* Fixed Header */
-        header {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Navigation Bar Styling */
+        nav {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
         
-        /* Navigation Links */
-        .nav-link-btn {
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-        }
-        .nav-link-btn:hover {
-            color: #c2b280;
-        }
-        .nav-link-btn.active {
-            color: #c2b280;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-bottom-color: #c2b280;
+        .nav-item {
+            position: relative;
             font-weight: 500;
+            color: #333;
+            transition: color 0.3s;
         }
-        
-        /* Page Content Transition */
-        .page-content {
+        .nav-item:hover, .nav-item.active {
+            color: var(--primary-green);
+        }
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px; /* Slightly thicker underline */
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-green);
+            transition: width 0.3s ease-out;
+        }
+        .nav-item:hover::after, .nav-item.active::after {
+            width: 100%;
+        }
+
+        /* Page Transitions */
+        .page-section {
             display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            animation: fadeIn 0.5s ease forwards;
+            animation: fadeIn 0.8s ease-out;
         }
-        .page-content.active {
+        .page-section.active {
             display: block;
-            opacity: 1;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Section Title Styling */
-        .section-header {
+        /* Sub-tab Styling */
+        .sub-tab-btn {
+            border-bottom: 2px solid transparent;
+            color: #666;
+            transition: all 0.2s;
+        }
+        .sub-tab-btn:hover {
+            color: var(--primary-green);
+        }
+        .sub-tab-btn.active {
+            border-bottom: 3px solid var(--primary-green);
+            color: var(--primary-green);
+            font-weight: 700;
+        }
+        
+        /* Section Header Title Style */
+        .section-title-line {
+            position: relative;
             padding-bottom: 1rem;
-            margin-bottom: 2rem;
-            border-bottom: 4px solid #c2b280;
+            margin-bottom: 2.5rem;
         }
-
-        /* Responsive Grid for Programs */
-        .program-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            .page-container { padding: 1rem; }
-            .program-grid { grid-template-columns: 1fr; }
-            .flex-col-reverse-md { flex-direction: column-reverse; }
+        .section-title-line::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-gold);
+            border-radius: 9999px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Header & Navigation -->
-    <header class="bg-primary sticky top-0 z-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex-shrink-0">
-                    <span class="text-xl sm:text-2xl font-bold text-white tracking-wider">
-                        자연치유관광포럼
-                    </span>
+    <!-- Navigation Bar -->
+    <nav class="fixed w-full z-50 top-0 shadow-lg h-20 flex items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex justify-between items-center">
+            
+            <!-- Logo & Title -->
+            <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="switchPage('about')">
+                <!-- Replace with actual Logo image URL if available -->
+                <img src="https://breezefeel.github.io/NHT/자연치유관광포럼 로고.png" 
+                     alt="자연치유관광포럼 로고" 
+                     class="h-12 w-auto object-contain">
+                <div class="hidden sm:block">
+                    <span class="block text-xl font-extrabold text-gray-800 leading-none serif-font" style="color: var(--primary-green);">자연치유관광포럼</span>
+                    <span class="block text-xs text-gray-500 tracking-wider">Natural Healing Tourism Forum</span>
                 </div>
-                <!-- Desktop Navigation (3 Pages) -->
-                <nav class="hidden md:flex space-x-2 text-sm">
-                    <button class="nav-link-btn text-white px-4 py-2 rounded-lg" data-page="page1">
-                        <i class="fas fa-home mr-1"></i> 포럼 소개 및 철학
-                    </button>
-                    <button class="nav-link-btn text-white px-4 py-2 rounded-lg" data-page="page2">
-                        <i class="fas fa-heartbeat mr-1"></i> 힐링 프로그램
-                    </button>
-                    <button class="nav-link-btn text-white px-4 py-2 rounded-lg" data-page="page3">
-                        <i class="fas fa-user-tie mr-1"></i> 전문가 및 법인 정보
-                    </button>
-                </nav>
-                <!-- Mobile Menu Button - Optional, but keeps layout clean -->
-                <button id="menu-button" class="md:hidden text-white focus:outline-none">
-                    <i class="fas fa-bars w-6 h-6"></i>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-12">
+                <button onclick="switchPage('about')" class="nav-item text-lg py-2" id="nav-about">포럼 소개</button>
+                <button onclick="switchPage('forum')" class="nav-item text-lg py-2" id="nav-forum">힐링포럼</button>
+                <button onclick="switchPage('story')" class="nav-item text-lg py-2" id="nav-story">힐링스토리</button>
+                <button onclick="switchPage('contact')" class="nav-item text-lg py-2" id="nav-contact">연락처</button>
+            </div>
+
+            <!-- Mobile Menu Button (Placeholder) -->
+            <div class="md:hidden">
+                <button class="text-gray-600 focus:outline-none p-2 rounded-lg hover:bg-gray-100 transition">
+                    <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
         </div>
-        <!-- Mobile Menu Links -->
-        <div id="mobile-menu" class="md:hidden hidden bg-primary text-center pb-2">
-            <button class="nav-link-btn text-white block w-full py-2" data-page="page1">포럼 소개 및 철학</button>
-            <button class="nav-link-btn text-white block w-full py-2" data-page="page2">힐링 프로그램</button>
-            <button class="nav-link-btn text-white block w-full py-2" data-page="page3">전문가 및 법인 정보</button>
-        </div>
-    </header>
+    </nav>
 
-    <!-- Main Content Area -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 page-container">
+    <!-- Spacer for fixed Nav -->
+    <div class="h-20"></div>
 
-        <!-- ======================================================= -->
-        <!-- PAGE 1: 포럼 소개 및 철학 (Identity & Philosophy) -->
-        <!-- ======================================================= -->
-        <div id="page1" class="page-content active">
-            
-            <!-- 1. 비전 및 인사말 -->
-            <section class="mb-16 p-8 bg-white rounded-xl shadow-lg">
-                <div class="flex flex-col md:flex-row gap-8 items-center">
-                    <div class="md:w-1/2">
-                        <h2 class="text-4xl font-extrabold color-primary mb-6 section-header">
-                            사단법인 자연치유관광포럼
-                        </h2>
-                        <blockquote class="text-xl italic font-medium mb-6 quote-box border-l-4 pl-4 border-accent text-gray-700">
-                            "자연은 가장 위대한 의사이며, 회복은 기술이 아니라 삶의 방식에서 시작된다."
-                        </blockquote>
-                        <p class="mb-4 leading-relaxed text-gray-600">
-                            본 포럼은 자연과 인간이 다시 연결되는 치유의 장을 지향합니다. 지역의 고유 자원을 단순한 휴양이 아닌 삶의 전환점이 될 수 있도록 과학과 임상의 언어로 증명해가는 것을 목표로 합니다.
-                        </p>
-                        <p class="text-right font-semibold color-primary mt-6">
-                            이사장 전세일 박사
-                        </p>
-                    </div>
-                    <div class="md:w-1/2 w-full">
-                        <!-- Placeholder Image: Nature Scene -->
-                        <img src="http://googleusercontent.com/image_collection/image_retrieval/10328443144959811454" 
-                             alt="햇살이 비치는 숲속 자연 풍경" 
-                             class="w-full h-64 object-cover rounded-lg shadow-md"
-                             onerror="this.onerror=null; this.src='https://placehold.co/600x400/0b4f3b/ffffff?text=Nature+Healing+Vision'">
-                    </div>
-                </div>
-            </section>
 
-            <!-- 2. 포럼 취지 및 비전 -->
-            <section class="mb-16 p-8 bg-secondary rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold color-primary mb-6 section-header">
-                    시대적 과제와 포럼의 비전
-                </h2>
-                <div class="program-grid">
-                    <!-- Vision 1 -->
-                    <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-xl transition duration-300">
-                        <div class="text-3xl color-accent mb-3"><i class="fas fa-pills"></i></div>
-                        <h3 class="font-bold text-xl mb-2 text-gray-700">만성질환 극복</h3>
-                        <p class="text-sm text-gray-600">저비용 고효율의 예방 중심 의료 정책에 기여하여 고령화 사회의 건강 수명 증진에 기여합니다.</p>
-                    </div>
-                    <!-- Vision 2 -->
-                    <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-xl transition duration-300">
-                        <div class="text-3xl color-accent mb-3"><i class="fas fa-globe"></i></div>
-                        <h3 class="font-bold text-xl mb-2 text-gray-700">힐링 한류 확산</h3>
-                        <p class="text-sm text-gray-600">선조들의 자연치유 문화를 재인식하고 활용하여 '힐링 한류'로 세계에 전파합니다.</p>
-                    </div>
-                    <!-- Vision 3 -->
-                    <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-xl transition duration-300">
-                        <div class="text-3xl color-accent mb-3"><i class="fas fa-industry"></i></div>
-                        <h3 class="font-bold text-xl mb-2 text-gray-700">융복합 산업 기반</h3>
-                        <p class="text-sm text-gray-600">'사람이 자연이다'는 생활문화를 IT 및 현대 의료와 융합한 6차 산업 모델을 구축합니다.</p>
-                    </div>
-                </div>
-            </section>
+        <!-- ============================================== -->
+        <!-- PAGE: 1. 포럼 소개 (About) -->
+        <!-- ============================================== -->
+        <section id="page-about" class="page-section max-w-7xl mx-auto px-4 py-16">
+            <div class="text-center section-title-line">
+                <h2 class="text-4xl font-extrabold mb-3 serif-font" style="color: var(--primary-green);">포럼 소개</h2>
+                <p class="text-lg text-gray-600">자연과 사람이 하나되는 치유의 길을 엽니다.</p>
+            </div>
 
-            <!-- 3. 연혁 -->
-            <section class="mb-16 p-8 bg-white rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold color-primary mb-6 section-header">
-                    주요 연혁 (History)
-                </h2>
-                <div class="relative pl-10">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-gray-200"></div>
+            <!-- Sub-navigation Tabs (Updated) -->
+            <div class="flex justify-center flex-wrap gap-x-8 gap-y-3 mb-12 border-b border-gray-200">
+                <button onclick="switchSubTab('founding')" class="sub-tab-btn active pb-3 px-4 text-base md:text-lg" id="tab-founding">설립에 즈음하여</button>
+                <button onclick="switchSubTab('greeting')" class="sub-tab-btn pb-3 px-4 text-base md:text-lg" id="tab-greeting">이사장 인사말</button>
+                <button onclick="switchSubTab('experts')" class="sub-tab-btn pb-3 px-4 text-base md:text-lg" id="tab-experts">이사/전문위원</button>
+                <button onclick="switchSubTab('history')" class="sub-tab-btn pb-3 px-4 text-base md:text-lg" id="tab-history">연혁</button>
+                <button onclick="switchSubTab('statute')" class="sub-tab-btn pb-3 px-4 text-base md:text-lg" id="tab-statute">정관</button>
+                <button onclick="switchSubTab('participants')" class="sub-tab-btn pb-3 px-4 text-base md:text-lg" id="tab-participants">참여기관</button><!-- New Tab -->
+            </div>
+
+            <div class="bg-white p-6 md:p-10 rounded-xl shadow-xl border border-gray-100 min-h-[700px]">
+                
+                <!-- 1. 설립에 즈음하여 -->
+                <div id="content-founding" class="sub-content">
                     
-                    <div class="timeline-item mb-8 relative">
-                        <div class="absolute -left-2 top-1 w-5 h-5 bg-primary rounded-full border-2 border-white"></div>
-                        <p class="font-semibold text-xl color-primary">2017년</p>
-                        <ul class="list-disc ml-5 mt-1 text-gray-600 text-sm">
-                            <li>파주 엔자임하우스 / 거제도 소낭구펜션 Healing Center/Stay 인증 1호 선정</li>
-                            <li>정기총회: 김근하 이사장 선임</li>
-                        </ul>
-                    </div>
-                    <div class="timeline-item mb-8 relative">
-                        <div class="absolute -left-2 top-1 w-5 h-5 bg-primary rounded-full border-2 border-white"></div>
-                        <p class="font-semibold text-xl color-primary">2015년</p>
-                        <ul class="list-disc ml-5 mt-1 text-gray-600 text-sm">
-                            <li>K-Healing 한마당 개최 / 한마음 요양병원 Healing Clinic 인증 1호 선정</li>
-                            <li>정기총회: 이남택 이사장(고려대 교수), 최서형 이사장(위담한방병원장) 선임</li>
-                        </ul>
-                    </div>
-                    <div class="timeline-item mb-8 relative">
-                        <div class="absolute -left-2 top-1 w-5 h-5 bg-primary rounded-full border-2 border-white"></div>
-                        <p class="font-semibold text-xl color-primary">2013년</p>
-                        <ul class="list-disc ml-5 mt-1 text-gray-600 text-sm">
-                            <li>**3월: 문화체육관광부 법인 설립 허가증 발부** (초대 이사장 전세일)</li>
-                            <li>9월: 주호영 국회의원과 컨퍼런스 개최 (국회)</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        </div>
+                    <h3 class="text-3xl font-bold text-gray-800 mb-10 border-b pb-4 text-center serif-font">사단법인 자연치유관광포럼<br>설립의 의미</h3>
 
-        <!-- ======================================================= -->
-        <!-- PAGE 2: 힐링 프로그램 및 평가 시스템 (The Solution) -->
-        <!-- ======================================================= -->
-        <div id="page2" class="page-content">
+                    <!-- 이미지 영역 (상단 중앙 배치, 개선된 스타일) -->
+                    <div class="flex flex-col items-center mb-12">
+                        <div class="rounded-xl overflow-hidden shadow-2xl border-4 border-white bg-white w-full max-w-sm md:max-w-xs transform transition duration-500 hover:shadow-green-300/50">
+                            <img src="https://breezefeel.github.io/NHT/전세일 이사장님.gif" 
+                                alt="전세일 이사장님" 
+                                class="w-full h-auto object-cover rounded-lg">
+                        </div>
+                        <div class="p-4 text-center mt-4">
+                            <p class="text-2xl font-bold serif-font" style="color: var(--primary-green);">초대 이사장 전세일</p>
+                            <p class="text-base text-gray-500 mt-1">통합의학의 선구자 · 연세대학교 명예교수</p>
+                        </div>
+                    </div>
 
-            <!-- 1. 5가지 正 웰니스 프로그램 -->
-            <section class="mb-16 p-8 bg-white rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold color-primary mb-8 section-header">
-                    5가지 正(정) 웰니스 프로그램
-                </h2>
-                <div class="program-grid">
-                    <!-- 정식 (正食) -->
-                    <div class="text-center p-6 bg-green-50 rounded-lg border-t-4 border-lime-600">
-                        <div class="text-5xl mb-3 text-lime-600"><i class="fas fa-carrot"></i></div>
-                        <h3 class="font-bold text-xl mb-1 text-gray-700">정식 (正食)</h3>
-                        <p class="text-sm text-gray-600">체질별 맞춤 식단 및 메디푸드로 건강한 식습관을 개선합니다.</p>
-                    </div>
-                    <!-- 정동 (正動) -->
-                    <div class="text-center p-6 bg-blue-50 rounded-lg border-t-4 border-blue-600">
-                        <div class="text-5xl mb-3 text-blue-600"><i class="fas fa-dumbbell"></i></div>
-                        <h3 class="font-bold text-xl mb-1 text-gray-700">정동 (正動)</h3>
-                        <p class="text-sm text-gray-600">자세 교정 운동을 통해 신체 균형(Alignment)을 맞춥니다.</p>
-                    </div>
-                    <!-- 정면 (正眠) -->
-                    <div class="text-center p-6 bg-indigo-50 rounded-lg border-t-4 border-indigo-600">
-                        <div class="text-5xl mb-3 text-indigo-600"><i class="fas fa-moon"></i></div>
-                        <h3 class="font-bold text-xl mb-1 text-gray-700">정면 (正眠)</h3>
-                        <p class="text-sm text-gray-600">수면 환경 개선을 통해 몸의 회복력을 극대화합니다.</p>
-                    </div>
-                    <!-- 정식 (正息) -->
-                    <div class="text-center p-6 bg-teal-50 rounded-lg border-t-4 border-teal-600">
-                        <div class="text-5xl mb-3 text-teal-600"><i class="fas fa-wind"></i></div>
-                        <h3 class="font-bold text-xl mb-1 text-gray-700">정식 (正息)</h3>
-                        <p class="text-sm text-gray-600">호흡법 및 명상을 통해 자율신경계 균형을 도모합니다.</p>
-                    </div>
-                    <!-- 정심 (正心) -->
-                    <div class="text-center p-6 bg-pink-50 rounded-lg border-t-4 border-pink-600">
-                        <div class="text-5xl mb-3 text-pink-600"><i class="fas fa-brain"></i></div>
-                        <h3 class="font-bold text-xl mb-1 text-gray-700">정심 (正心)</h3>
-                        <p class="text-sm text-gray-600">심리 상담 및 스트레스 관리로 긍정적 사고방식을 함양합니다.</p>
-                    </div>
-                </div>
-            </section>
+                    <!-- 텍스트 내용 -->
+                    <div class="text-gray-700 leading-8 text-justify space-y-7 max-w-4xl mx-auto text-base">
+                        <p>
+                            본 포럼은 지난 2013년 5월 9일 문화체육관광부 국제관광서비스과로부터 <strong class="text-lg font-extrabold" style="color: var(--primary-green);">'사단법인 자연치유관광포럼'</strong>으로 법인 인가를 받았습니다.
+                        </p>
 
-            <!-- 2. 4단계 프로그램 적합성 평가 상세 -->
-            <section class="mb-16 p-8 bg-secondary rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold color-primary mb-8 section-header">
-                    4단계 프로그램 적합성 평가 시스템
-                </h2>
-                <div class="flex flex-col md:flex-row gap-8 items-start">
-                    <div class="md:w-1/2 w-full space-y-4">
-                        <!-- 1단계 -->
-                        <div class="p-4 bg-white rounded-lg shadow-md">
-                            <span class="font-bold text-xl color-primary block mb-1">1단계: 건강 및 생활 습관 평가</span>
-                            <p class="text-sm text-gray-600">HRA 분석, 수면 질, 삶의 질, 기초 체력 및 신체 균형 평가.</p>
+                        <p>
+                            의료관광과 함께 우리의 앞선 생활문화를 미래 건강산업의 핵심 동력으로 만들기 위해, 힐링 콘텐츠, 커뮤니티, 교육 등의 개발과 지원을 통해 힐링투어 기반을 조성합니다. 이는 해외 관광객 유치는 물론, 고령화 사회에서 저비용 고효율의 건강한 생활문화 창달에 기여할 것으로 기대됩니다.
+                        </p>
+
+                        <div class="bg-[#E8F3EB] p-6 md:p-8 rounded-xl border-l-4" style="border-color: var(--accent-gold);">
+                            <p class="text-lg italic font-medium text-gray-800">
+                                "자연과 치유는 우리 선조들의 천인합일 자연주의에서 유래되어, 본성의 회복을 스스로 찾아가는 생활방식 속에서 우러나옵니다. ‘사람이 자연이다’라는 자연과의 조화와 회복이 곧 치유라는 결과물을 만들어 냅니다."
+                            </p>
+                            <p class="text-sm text-right text-gray-600 mt-3">- 전세일 이사장</p>
                         </div>
-                        <!-- 2단계 -->
-                        <div class="p-4 bg-white rounded-lg shadow-md">
-                            <span class="font-bold text-xl color-primary block mb-1">2단계: 비침습 치료 적합성 평가</span>
-                            <p class="text-sm text-gray-600">도수 평가, 자세 분석, 통증 강도(VAS/ODI), 근전도 및 균형 능력 평가.</p>
-                        </div>
-                        <!-- 3단계 -->
-                        <div class="p-4 bg-white rounded-lg shadow-md">
-                            <span class="font-bold text-xl color-primary block mb-1">3단계: 메디컬 치료 적합성 평가</span>
-                            <p class="text-sm text-gray-600">혈액/호르몬 검사, 영상 검사(X-ray, MRI, 초음파), 심혈관 및 대사 질환 위험 평가.</p>
-                        </div>
-                        <p class="mt-4 text-sm italic text-gray-500">
-                            *평가 결과를 바탕으로 웰니스, 비침습, 메디컬 치료 중 개인 맞춤형 프로그램이 제안됩니다.
+
+                        <p>
+                            이러한 자연의 이치를 분별하고 순응하는 삶을 힐링투어라는 잘 정비된 수단을 통해 세계인에게 알리고, 한국을 다시 찾아오게 만드는 새로운 한류문화를 형성할 수 있으리라 봅니다. 자연치유에 대한 개념과 정체성을 명확히 하여 생활문화를 재정비하고 콘텐츠를 재구성함으로써 <strong class="font-bold">“다시 찾고 싶은 한국, 생활문화 선진국”</strong>을 만들고자 합니다.
+                        </p>
+
+                        <p>
+                            현재 힐링 바람이 불고 있지만, 구체적인 사업화와 산업화를 위한 프로그램이나 프로토콜이 정비되어 있지 않아 혼란스러운 상황입니다. 본 포럼은 한민족의 인류시원 장자문화(복본, 다물, 풍유, 화랑으로 이어진 천인합일 문화)를 회복하여 세계인들에게 치유 감성을 보여주고자 합니다.
+                        </p>
+
+                        <p class="font-bold text-lg text-center py-4" style="color: var(--primary-green);">
+                            "힐링투어와 힐링 생태계를 통하여 세계인이 수긍하는 <span class="text-xl">‘자연치유 대한민국’</span>을 드러나게 할 수 있기를 기대합니다."
+                        </p>
+
+                        <p class="text-right text-gray-500 pt-6 border-t border-gray-100 text-sm">
+                            사) 자연치유관광포럼 초대 이사장 전세일 드림
                         </p>
                     </div>
-                    <div class="md:w-1/2 w-full flex flex-col items-center">
-                        <!-- Placeholder Image: Assessment/Diagnosis -->
-                        <img src="http://googleusercontent.com/image_collection/image_retrieval/7777187973168047031" 
-                             alt="전문가와 상담하는 모습" 
-                             class="w-full h-72 object-cover rounded-lg shadow-xl"
-                             onerror="this.onerror=null; this.src='https://placehold.co/600x450/0b4f3b/ffffff?text=Detailed+Assessment+Process'">
+                </div>
+
+                <!-- 2. 이사장 인사말 -->
+                <div id="content-greeting" class="sub-content hidden">
+                    <div class="max-w-4xl mx-auto text-center py-8">
+                        <div class="relative mb-10">
+                            <i class="fas fa-quote-left text-7xl absolute left-1/2 transform -translate-x-1/2 -top-10 text-gray-100 opacity-70"></i>
+                            <h3 class="text-4xl font-extrabold my-8 serif-font" style="color: var(--primary-green);">
+                                치유는 기술이 아닌<br>삶의 방식으로 찾아옵니다.
+                            </h3>
+                            <p class="text-xl text-gray-700 font-medium">- 사단법인 자연치유관광포럼 이사장 전세일 -</p>
+                        </div>
+                        
+                        <!-- 이사장 사진 (인사말 섹션용) -->
+                        <div class="flex justify-center mb-8">
+                            <img src="https://breezefeel.github.io/NHT/전세일 원장님.jpg" 
+                                alt="전세일 이사장님" 
+                                class="w-64 h-auto rounded-xl shadow-lg border border-gray-200 object-cover">
+                        </div>
+
+                        <p class="text-gray-700 leading-9 mb-8 text-left text-lg bg-gray-50 p-6 rounded-lg border">
+                            <strong style="color: var(--primary-green);">존경하는 자연치유관광포럼 가족 및 국민 여러분께,</strong><br><br>
+                            자연은 늘 우리 곁에 있었지만, 우리는 그 치유의 잠재력을 잊고 바쁜 일상에 매몰되어 살아왔습니다. 저는 수십 년간 통합의학의 길을 걸으며 산과 물, 햇살과 바람, 그리고 지역의 고유 자원이 단순한 휴양이 아닌 삶의 전환점이 될 수 있다는 진실을 깨달았습니다.<br><br>
+                            자연치유관광포럼은 자연과 인간이 다시 연결되는 치유의 장이 되기를 지향합니다. 우리는 과학적 근거와 전통의 지혜를 통합하여 올바른 웰니스의 표준을 제시하고, 국민 모두가 건강한 삶을 누릴 수 있도록 헌신하겠습니다. 우리의 활동에 많은 관심과 동참을 부탁드립니다.<br><br>
+                            감사합니다.
+                        </p>
                     </div>
                 </div>
-            </section>
 
-            <!-- 3. 3대 분류 -->
-            <section class="p-8 bg-white rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold color-primary mb-8 section-header">
-                    프로그램 3대 분류
-                </h2>
-                <div class="program-grid">
-                    <div class="text-center p-6 bg-green-50 rounded-lg border-4 border-dashed border-primary">
-                        <div class="text-4xl mb-2 text-primary"><i class="fas fa-hands-helping"></i></div>
-                        <h3 class="font-bold text-xl mb-1 text-gray-700">비침습 치료</h3>
-                        <p class="text-sm text-gray-600">골격, 연부 조직 수기 테크닉, 재활/교정 운동 등 전문가의 비침습적 치료.</p>
-                    </div>
-                    <div class="text-center p-6 bg-yellow-50 rounded-lg border-4 border-dashed border-primary">
-                        <div class="text-4xl mb-2 text-primary"><i class="fas fa-running"></i></div>
-                        <h3 class="font-bold text-xl mb-1 text-gray-700">웰니스</h3>
-                        <p class="text-sm text-gray-600">호흡법, 자세 관리, 식습관 개선 등 스스로 할 수 있는 생활 습관 관리.</p>
-                    </div>
-                    <div class="text-center p-6 bg-red-50 rounded-lg border-4 border-dashed border-primary">
-                        <div class="text-4xl mb-2 text-primary"><i class="fas fa-syringe"></i></div>
-                        <h3 class="font-bold text-xl mb-1 text-gray-700">메디컬 치료</h3>
-                        <p class="text-sm text-gray-600">약/주사, 시술/수술 등 전문적이고 최종적인 의료 치료.</p>
+                <!-- 3. 이사/전문위원 -->
+                <div id="content-experts" class="sub-content hidden">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center serif-font">포럼을 이끄는 주요 인사</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Expert Card 1 (E.g., Chairman Jun Seil) -->
+                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300">
+                            <div class="w-28 h-28 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden border-2 border-white shadow-inner">
+                                <img src="https://breezefeel.github.io/NHT/전세일 원장님.jpg" alt="전세일 이사장님" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="text-xl font-bold mb-1 text-gray-800">전세일 이사장</h4>
+                            <p class="text-base font-semibold mb-3" style="color: var(--primary-green);">통합의학 권위자 / 연세대학교 명예교수</p>
+                            <p class="text-sm text-gray-600">現 사단법인 자연치유관광포럼 이사장<br>前 연세대 세브란스병원 재활병원장</p>
+                        </div>
+                        
+                        <!-- Expert Card 2 (E.g., Director Park Junkyu) -->
+                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300">
+                            <div class="w-28 h-28 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden border-2 border-white shadow-inner">
+                                <!-- Placeholder image for Park Junkyu -->
+                                <img src="https://breezefeel.github.io/NHT/프로필-22_웹용.jpg" alt="박준규 이사" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="text-xl font-bold mb-1 text-gray-800">박준규 이사</h4>
+                            <p class="text-base font-semibold mb-3" style="color: var(--primary-green);">미국 카이로프랙틱 닥터 (D.C.)</p>
+                            <p class="text-sm text-gray-600">(주)힐링트리 법인 대표<br>IFC 국제얼굴교정학회 학회장</p>
+                        </div>
+
+                        <!-- Expert Card 3 (E.g., Director Park Junkyu) -->
+                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300">
+                            <div class="w-28 h-28 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden border-2 border-white shadow-inner">
+                                <!-- Placeholder image for Park Junkyu -->
+                                <img src="https://breezefeel.github.io/NHT/손민정 이사님.png" alt="박준규 이사" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="text-xl font-bold mb-1 text-gray-800">손민정 이사</h4>
+                            <p class="text-base font-semibold mb-3" style="color: var(--primary-green);">미국 카이로프랙틱 닥터 (D.C.)</p>
+                            <p class="text-sm text-gray-600">(협)희망더하기 사회적협동조합<br>IFC 국제얼굴교정학회 학회장</p>
+                        </div>
+
+                        <!-- Expert Card 3 (E.g., Director Park Junkyu) -->
+                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300">
+                            <div class="w-28 h-28 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden border-2 border-white shadow-inner">
+                                <!-- Placeholder image for Park Junkyu -->
+                                <img src="https://breezefeel.github.io/NHT/손태경 이사님.jpg" alt="박준규 이사" class="w-full h-full object-cover">
+                            </div>
+                            <h4 class="text-xl font-bold mb-1 text-gray-800">손태경 이사</h4>
+                            <p class="text-base font-semibold mb-3" style="color: var(--primary-green);">미국 카이로프랙틱 닥터 (D.C.)</p>
+                            <p class="text-sm text-gray-600">니시 의학<br>IFC 국제얼굴교정학회 학회장</p>
+                        </div>
+
+                        <!-- Advisory Board Placeholder -->
+                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-md hover:shadow-xl transition duration-300 flex flex-col justify-center items-center">
+                            <div class="text-gray-400 mb-4"><i class="fas fa-users-cog text-5xl"></i></div>
+                            <h4 class="text-xl font-bold text-gray-800 mb-2">이사 및 전문위원단</h4>
+                            <p class="text-sm text-gray-600 mt-2">의학, 한의학, 관광, IT 등<br>각 분야의 최고 전문가로 구성</p>
+                        </div>
                     </div>
                 </div>
-            </section>
-        </div>
 
-        <!-- ======================================================= -->
-        <!-- PAGE 3: 전문가 및 법인 정보 (Expertise & Contact) -->
-        <!-- ======================================================= -->
-        <div id="page3" class="page-content">
+                <!-- 4. 연혁 -->
+                <div id="content-history" class="sub-content hidden">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center serif-font">포럼 주요 활동 연혁</h3>
+                    <div class="max-w-4xl mx-auto border-l-4 pl-8 space-y-12 relative ml-4 md:ml-10" style="border-color: var(--primary-green);">
+                        
+                        <!-- Year 2017 -->
+                        <div class="relative group">
+                            <div class="absolute -left-[45px] top-1 w-6 h-6 bg-white rounded-full border-4 border-[#C5A065] shadow-sm z-10"></div>
+                            <h4 class="text-2xl font-extrabold text-[#0F4C3A] mb-3">2017</h4>
+                            <ul class="space-y-2 text-gray-700 leading-relaxed list-disc pl-5">
+                                <li><span class="font-bold text-gray-900">4월:</span> 파주 엔자임하우스(Enzyme House) Healing Center 인증 1호 선정</li>
+                                <li><span class="font-bold text-gray-900">3월:</span> 거제도 소낭구펜션(Sonangu Pension) Healing Stay 인증 1호 선정</li>
+                                <li><span class="font-bold text-gray-900">2월:</span> 부산한가족요양병원 세미나실 이사부부세미나 개최</li>
+                                <li><span class="font-bold text-gray-900">정기총회:</span> 김근하 이사장(좌천의원원장) 선임</li>
+                            </ul>
+                        </div>
 
-            <!-- 1. 전문가 소개 (박준규 D.C.) -->
-            <section class="mb-16 p-8 bg-white rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold color-primary mb-8 section-header">
-                    힐링 프로그램 개발 전문가 소개
-                </h2>
-                <div class="flex flex-col-reverse md:flex-row gap-8 items-start">
+                        <!-- Year 2016 -->
+                        <div class="relative group">
+                            <div class="absolute -left-[45px] top-1 w-6 h-6 bg-white rounded-full border-4 border-gray-300 group-hover:border-[#C5A065] transition duration-300 shadow-sm z-10"></div>
+                            <h4 class="text-2xl font-extrabold text-gray-800 mb-3">2016</h4>
+                            <ul class="space-y-2 text-gray-700 leading-relaxed list-disc pl-5">
+                                <li>
+                                    <span class="font-bold text-gray-900">연중:</span> 자연치유관광포럼 자체 학술포럼 진행
+                                    <p class="text-sm text-gray-500 mt-1 pl-1 border-l-2 border-gray-200">
+                                        주제: 융복합과 자연치유, 슬로우에이징, 여행치유, 싸나토로지, 글로벌리더, 목재의 영향, 자연미인법, 노년의 아름다운 삶, 자연치유와 건강식품 등
+                                    </p>
+                                </li>
+                                <li><span class="font-bold text-gray-900">3월:</span> 강원대학교 학술림 방문</li>
+                                <li><span class="font-bold text-gray-900">1월:</span> (사)자연치유관광포럼 - 강원대학교 산림과학연구소 MOU 체결</li>
+                                <li><span class="font-bold text-gray-900">정기총회:</span> 이남택 이사장(고려대 교수) 선임</li>
+                            </ul>
+                        </div>
+
+                        <!-- Year 2015 -->
+                        <div class="relative group">
+                            <div class="absolute -left-[45px] top-1 w-6 h-6 bg-white rounded-full border-4 border-gray-300 group-hover:border-[#C5A065] transition duration-300 shadow-sm z-10"></div>
+                            <h4 class="text-2xl font-extrabold text-gray-800 mb-3">2015</h4>
+                            <ul class="space-y-2 text-gray-700 leading-relaxed list-disc pl-5">
+                                <li><span class="font-bold text-gray-900">10월:</span> K-Healing 한마당 개최</li>
+                                <li><span class="font-bold text-gray-900">8월:</span> 힐링포럼 초청강연 (박민수 원장)</li>
+                                <li><span class="font-bold text-gray-900">3월:</span> 한마음 요양병원 Healing Clinic 인증 1호 병원 선정</li>
+                                <li><span class="font-bold text-gray-900">정기총회:</span> 최서형 이사장(위담한방병원장) 선임</li>
+                            </ul>
+                        </div>
+
+                        <!-- Year 2014 -->
+                        <div class="relative group">
+                            <div class="absolute -left-[45px] top-1 w-6 h-6 bg-white rounded-full border-4 border-gray-300 group-hover:border-[#C5A065] transition duration-300 shadow-sm z-10"></div>
+                            <h4 class="text-2xl font-extrabold text-gray-800 mb-3">2014</h4>
+                            <ul class="space-y-2 text-gray-700 leading-relaxed list-disc pl-5">
+                                <li><span class="font-bold text-gray-900">12월:</span> 이종배 국회의원 초청 컨퍼런스 개최 (국회의원회관)</li>
+                                <li><span class="font-bold text-gray-900">12월:</span> 제주 서귀포시 관광발전을 위한 시민대토론회 (서귀포시 관광협의회)</li>
+                                <li><span class="font-bold text-gray-900">9월:</span> 한국형 자연치유 융합 의료센터 및 충주 플랜 MOU</li>
+                                <li><span class="font-bold text-gray-900">6월:</span> 정선군 사업계획 및 아시아 힐링페스티벌 관련 정기이사회 개최 (차움)</li>
+                                <li><span class="font-bold text-gray-900">3월:</span> 한국관광공사 정기총회 개최</li>
+                                <li><span class="font-bold text-gray-900">연중:</span> 독일 보리스호펜 용역사업(모디파이) 모델 연구 추진 (주호영 국회의원 협력)</li>
+                            </ul>
+                        </div>
+
+                        <!-- Year 2013 (Founding) -->
+                        <div class="relative group">
+                            <div class="absolute -left-[45px] top-1 w-6 h-6 bg-[#0F4C3A] rounded-full border-4 border-white shadow-md z-10"></div>
+                            <h4 class="text-2xl font-extrabold text-[#0F4C3A] mb-3">2013 (법인 설립)</h4>
+                            <ul class="space-y-2 text-gray-700 leading-relaxed list-disc pl-5">
+                                <li>
+                                    <span class="font-bold text-gray-900">9월:</span> 자연치유관광포럼 국회 컨퍼런스 개최
+                                    <p class="text-sm text-gray-500 mt-1 pl-1 border-l-2 border-gray-200">
+                                        주제: 자연치유를 통해 꿈꾸는 새로운 관광<br>
+                                        주최: 주호영 국회의원 / 주관: (사)자연치유관광포럼, 한국관광공사, 국립자연휴양림관리소
+                                    </p>
+                                </li>
+                                <li><span class="font-bold text-gray-900">3월:</span> <strong class="text-[#0F4C3A]">문화체육관광부 법인 설립 허가 (초대 이사장 전세일)</strong></li>
+                                <li><span class="font-bold text-gray-900">1월:</span> 사단법인 발족 모임 ("힐링을 만들어가는 더 큰 대한민국" 비전 선포)</li>
+                            </ul>
+                        </div>
+
+                        <!-- Year 2012 (Pre-foundation) -->
+                        <div class="relative group">
+                            <div class="absolute -left-[45px] top-1 w-6 h-6 bg-white rounded-full border-4 border-gray-300 group-hover:border-[#C5A065] transition duration-300 shadow-sm z-10"></div>
+                            <h4 class="text-2xl font-extrabold text-gray-800 mb-3">2012 (설립 준비 및 기반 조성)</h4>
+                            <ul class="space-y-2 text-gray-700 leading-relaxed list-disc pl-5">
+                                <li><span class="font-bold text-gray-900">12월:</span> 제주 서귀포시 관광발전을 위한 시민대토론회</li>
+                                <li><span class="font-bold text-gray-900">6월:</span> 제2회 자연미인대회 개최 (산들소리수목원)</li>
+                                <li><span class="font-bold text-gray-900">4월:</span> '멋진인생 클럽' 창립식 (자연치유 문화 확산 프로슈머 그룹)</li>
+                                <li><span class="font-bold text-gray-900">3월:</span> 월간 힐링 전문지 '멋진인생' 창간</li>
+                                <li><span class="font-bold text-gray-900">연중:</span> 제1~4호 치유마을 여행 진행 (악양, 증도, 경주, 화천)</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+                
+                 <!-- 5. 정관 (수정됨) -->
+                <div id="content-statute" class="sub-content hidden">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-10 text-center serif-font">사단법인 자연치유관광포럼 정관</h3>
                     
-                    <div class="md:w-2/3 w-full space-y-6">
-                        <h3 class="text-3xl font-bold color-primary">박준규 D.C.</h3>
-                        <p class="text-xl font-medium text-gray-600 border-b pb-3 mb-4">
-                            미국 카이로프랙틱 닥터 / 물리치료 전문가
-                        </p>
-                        <div class="grid sm:grid-cols-2 gap-6">
-                            <!-- 학력/자격 -->
-                            <div>
-                                <h4 class="font-bold text-lg mb-2 color-accent"><i class="fas fa-graduation-cap mr-2"></i>주요 학력 및 자격</h4>
-                                <ul class="list-disc ml-5 text-sm space-y-1 text-gray-700">
-                                    <li>미국 Bridgeport Chiropractic College 졸업 (2008)</li>
-                                    <li>미국 California State Chiropractic Doctor License</li>
-                                    <li>대전대 물리치료학과 졸업 (2023)</li>
-                                    <li>미국 카이로프랙틱닥터협회(ACA) 정회원</li>
-                                </ul>
-                            </div>
-                            <!-- 활동/직책 -->
-                            <div>
-                                <h4 class="font-bold text-lg mb-2 color-accent"><i class="fas fa-briefcase mr-2"></i>현재 활동 및 직책</h4>
-                                <ul class="list-disc ml-5 text-sm space-y-1 text-gray-700">
-                                    <li>(사) 자연치유관광 포럼 이사</li>
-                                    <li>(주) 힐링트리 법인 대표</li>
-                                    <li>IFC 국제얼굴교정학회 학회장</li>
-                                    <li>목동 서울활짝편 재활의학과 센터장</li>
-                                    <li>대한트레이너협회(KTA) 교육이사</li>
-                                </ul>
+                    <div class="max-w-4xl mx-auto space-y-10 text-gray-700 leading-relaxed">
+                        
+                        <!-- Chapter 1 -->
+                        <div class="border-b border-gray-200 pb-8">
+                            <h4 class="text-2xl font-bold text-[#0F4C3A] mb-4">제1장 총칙</h4>
+                            <div class="space-y-4 pl-4 border-l-2 border-gray-100">
+                                <p><strong class="text-gray-900">제1조(목적)</strong> 이 법인은 민법 제 32조 및 문화체육관광부 소관 비영리법인의 설립 및 감독에 관한 규칙에 따라 자연치유 관광진흥에 필요한 힐링 프로그램 개발과 교육 및 힐링 커뮤니티 지원을 목적으로 한다.</p>
+                                <p><strong class="text-gray-900">제2조(명칭)</strong><br>
+                                    ① 이 법인은 사단법인 자연치유관광포럼이라 칭한다.<br>
+                                    ② 홈페이지주소는 www.nhealingstay.com 로 한다.</p>
+                                <p><strong class="text-gray-900">제3조(사무소의 소재지)</strong><br>
+                                    ① 이 법인의 사무소는 서울특별시 중구 을지로 14길8 을지재단빌딩에 둔다.<br>
+                                    ② 이 법인의 지부를 서울, 경기, 경남, 제주에 두며 그 외 필요한 곳에 둘 수 있다.</p>
+                                <p><strong class="text-gray-900">제4조(사업)</strong><br>
+                                    ① 이 법인은 제1조의 목적을 달성하기 위하여 다음의 목적사업을 행한다.<br>
+                                    &nbsp;&nbsp;1. 힐링 관광 프로그램 및 콘텐츠 개발<br>
+                                    &nbsp;&nbsp;2. 힐링 관광 연구개발<br>
+                                    &nbsp;&nbsp;3. 힐링 관광 교육 및 커뮤니티 지원<br>
+                                    &nbsp;&nbsp;4. 다문화가정 힐링 프로그램 개발 및 보급 운영<br>
+                                    ② 제1항의 목적사업의 경비에 충당하기 위하여 수익사업(힐링투어, 컨설팅 등)을 행할 수 있다.</p>
+                                <p><strong class="text-gray-900">제5조(법인의 이익)</strong> 이 법인의 목적사업과 수익사업에서 얻은 이익은 회원의 이익이 아닌 공익을 위하여 사용하고 직접수혜자는 불특정 다수이어야 한다.</p>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="md:w-1/3 w-full flex justify-center">
-                        <!-- Placeholder Image: Expert Photo -->
-                        <img src="https://placehold.co/250x250/c2b280/0b4f3b?text=Dr.+Park+J.K"
-                             alt="박준규 전문가 사진" 
-                             class="w-56 h-56 object-cover rounded-full shadow-lg border-4 border-primary">
+                        <!-- Chapter 2 -->
+                        <div class="border-b border-gray-200 pb-8">
+                            <h4 class="text-2xl font-bold text-[#0F4C3A] mb-4">제2장 회원</h4>
+                            <div class="space-y-4 pl-4 border-l-2 border-gray-100">
+                                <p><strong class="text-gray-900">제6조(회원자격)</strong> 이 법인의 회원은 본 회의 취지에 찬동하고 소정의 입회원서를 제출하여 이사회의 승인을 얻어야 한다. (개인/단체 모두 가능)</p>
+                                <p><strong class="text-gray-900">제7조(회원의 권리와 의무)</strong> 이 법인의 회원은 회비를 납부할 의무를 가지며 기타 이 정관이 정하는 권리와 의무를 갖는다.</p>
+                                <p><strong class="text-gray-900">제9조(회원의 제명)</strong> 이 법인의 회원으로서 이 법인의 목적에 배치되는 행위 또는 명예·위신에 손상을 가져오는 행위를 하였을 때에는 이사회의 의결로써 이사장이 제명할 수 있다.</p>
+                            </div>
+                        </div>
+
+                        <!-- Chapter 3 & 4 & 5 (Summary for layout) -->
+                        <div class="border-b border-gray-200 pb-8">
+                            <h4 class="text-2xl font-bold text-[#0F4C3A] mb-4">제3장 임원 / 제4장 총회 / 제5장 이사회</h4>
+                            <div class="space-y-4 pl-4 border-l-2 border-gray-100">
+                                <p><strong class="text-gray-900">임원 구성(제10조):</strong> 이사 6명 내지 15명(이사장 포함), 감사 1명을 둔다.</p>
+                                <p><strong class="text-gray-900">임원 임기(제12조):</strong> 이사 2년, 감사 3년으로 한다.</p>
+                                <p><strong class="text-gray-900">총회의 기능(제18조):</strong> 임원의 선출, 정관변경, 법인의 해산, 기타 중요사항을 의결한다.</p>
+                                <p><strong class="text-gray-900">이사회의 기능(제23조):</strong> 업무집행 및 사업계획 운영에 관한 사항을 심의·결정한다.</p>
+                            </div>
+                        </div>
+
+                        <!-- Chapter 6 -->
+                        <div class="border-b border-gray-200 pb-8">
+                            <h4 class="text-2xl font-bold text-[#0F4C3A] mb-4">제6장 재산 및 회계</h4>
+                            <div class="space-y-4 pl-4 border-l-2 border-gray-100">
+                                <p><strong class="text-gray-900">제29조(재산의 구분)</strong> 법인의 재산은 기본재산과 운영재산으로 구분한다.</p>
+                                <p><strong class="text-gray-900">제33조(회계원칙)</strong> 회계거래는 기업회계의 원칙에 따라 처리하며, 연간 기부금 모금액 및 활용실적은 홈페이지를 통해 공개한다.</p>
+                            </div>
+                        </div>
+
+                        <!-- Chapter 7 -->
+                        <div class="border-b border-gray-200 pb-8">
+                            <h4 class="text-2xl font-bold text-[#0F4C3A] mb-4">제7장 정관변경 및 해산</h4>
+                            <div class="space-y-4 pl-4 border-l-2 border-gray-100">
+                                <p><strong class="text-gray-900">제36조(정관변경)</strong> 정관 변경 시 총회에서 재적회원 3분의 2 이상의 찬성과 감독청의 허가를 받아야 한다.</p>
+                                <p><strong class="text-gray-900">제38조(잔여재산의 귀속)</strong> 해산 시 잔여재산은 국가·지방자치단체 또는 유사한 목적을 가진 비영리법인에게 귀속된다.</p>
+                            </div>
+                        </div>
+
+                        <div class="text-center pt-8">
+                            <a href="https://breezefeel.github.io/NHT/2025년 정관.pdf" 
+                            download="사단법인_자연치유관광포럼_정관.pdf"
+                            class="inline-flex items-center justify-center px-8 py-3 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 transition font-bold text-lg"
+                            >
+                                <i class="fas fa-file-pdf mr-3 text-xl"></i>정관 전문 다운로드
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </section>
 
-            <!-- 2. 법인 정보 및 연락처 -->
-            <section class="mb-16 p-8 bg-secondary rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold color-primary mb-8 section-header">
-                    법인 정보 및 연락처
-                </h2>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <!-- 법인 정보 테이블 -->
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-xl font-bold mb-4 color-primary">본사 연락처</h3>
-                        <table class="w-full text-left">
-                            <tbody>
-                                <tr class="border-b">
-                                    <th class="py-2 text-sm text-gray-500 w-1/3">설립 허가</th>
-                                    <td class="py-2 text-base font-medium">문화체육관광부</td>
-                                </tr>
-                                <tr class="border-b">
-                                    <th class="py-2 text-sm text-gray-500 w-1/3">사무소 주소</th>
-                                    <td class="py-2 text-base">서울 중구 동호로7길 26. 3층</td>
-                                </tr>
-                                <tr class="border-b">
-                                    <th class="py-2 text-sm text-gray-500 w-1/3">담당자 연락처</th>
-                                    <td class="py-2 text-base font-semibold">010-5328-4154</td>
-                                </tr>
+                <!-- 6. 참여기관 (New Content) -->
+                <div id="content-participants" class="sub-content hidden">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-4 text-center serif-font">사단법인 자연치유관광포럼 참여기관</h3>
+                    <p class="text-center text-gray-500 mb-10">2016. 12. 26 기준</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 shadow-lg rounded-xl overflow-hidden">
+                            <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="py-2 text-sm text-gray-500 w-1/3">이메일</th>
-                                    <td class="py-2 text-base"><a href="mailto:tda911@naver.com" class="text-blue-600 hover:underline">tda911@naver.com</a></td>
+                                    <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider w-12 sm:w-16">
+                                        No.
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider w-24 sm:w-32">
+                                        이름
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                        소속 기관/직책
+                                    </th>
+                                    <th class="hidden sm:table-cell px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider w-20">
+                                        분류
+                                    </th>
+                                    <th class="px-4 py-3 text-center text-xs font-bold text-gray-700 uppercase tracking-wider w-16">
+                                        참여 상태
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                
+                                <!-- Data Row 1 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">1</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">박권흠</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">한국차인연합회(회장) / 전우벽(사무국장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연합회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 2 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">2</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">한세영</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">한국서봉경혈지압학회(학회장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">학회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 3 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">3</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">최현임</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">한국건강교육협회(협회장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 4 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">4</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김형준</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">한국웃음치료전문협회(협회장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 5 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">5</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이찬</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">세계태극권연맹(부주석)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연합회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 6 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">6</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">장석중</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">푸드테라피연구소(소장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 7 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">7</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">박선우</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">청운차문화교육원(원장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 8 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">8</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">유정룡</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">PBEN효소과학연구소(소장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 9 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">9</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이경남</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">명상문화연구원(원장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 10 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">10</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">류정숙</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">예은 다례원(원장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 11 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">11</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">전세일</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">CHA의과학대학교 통합의학대학원(원장) / 국제자연치유연맹(총재)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 12 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">12</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">신경원</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">메디컬요가협회(협회장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 13 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">13</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이거룡</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">선문대학교 통합의학대학원(원장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 14 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">14</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">하헌주</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">주)하헌주온열건강과학협회장</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 15 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">15</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">임병식</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">국제한국임종협회(협회장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 16 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">16</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">조성하</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">동아일보 (편집국 부국장 여행전문기자)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">언론</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 17 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">17</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김재춘</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">자연요법사랑지기(원장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연합회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 18 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">18</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이소영</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">명지병원 예술치유센터(센터장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">센터</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 19 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">19</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">기태섭</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">한국자연치유교육협회(협회장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-yellow-600">진행중</td>
+                                </tr>
+                                <!-- Data Row 20 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">20</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">서범구</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">EM생명과학연구원(원장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">연구소</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 21 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">21</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">정광조</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">대전대 보건스포츠대학원(원장) / 통합치유사협회 (협회장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 22 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">22</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김성원</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">한국치유요가협회(협회장) / 진안에코에듀아토피센터(센터장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 23 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">23</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김세광</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">장신대 자연치유선교대학원(원장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">대학원</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 24 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">24</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">정강주</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">한국요가문화협회(협회장)</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 25 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">25</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이충직</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">(재) 한국글로벌재단</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">여행</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 26 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">26</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">민명원</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">서귀포시 관광협의회</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">관광</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
+                                </tr>
+                                <!-- Data Row 27 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">27</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">이한철</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">전남관광협회</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">관광</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium" style="color: var(--primary-green);">동참</td>
+                                </tr>
+                                <!-- Data Row 28 -->
+                                <tr>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">28</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-800">김종례</td>
+                                    <td class="px-6 py-3 text-sm text-gray-600">국제 온열테라피협회장</td>
+                                    <td class="hidden sm:table-cell px-4 py-3 whitespace-nowrap text-sm text-center text-gray-500">협회</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-center font-medium text-red-500">가입</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- 지부 현황 -->
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-xl font-bold mb-4 color-primary">주요 지부 현황</h3>
-                        <ul class="space-y-3 text-sm">
-                            <li class="p-2 bg-gray-50 rounded-md"><span class="font-semibold color-primary">서울 지부:</span> 서울특별시 중구 다산로8길 20</li>
-                            <li class="p-2 bg-gray-50 rounded-md"><span class="font-semibold color-primary">경기 지부:</span> 경기도 파주시 산남로 5-66</li>
-                            <li class="p-2 bg-gray-50 rounded-md"><span class="font-semibold color-primary">경남 지부:</span> 경남 하동군 악양면 신흥길 167</li>
-                            <li class="p-2 bg-gray-50 rounded-md"><span class="font-semibold color-primary">제주 지부:</span> 제주특별자치도 제주시 도령로 13길 6</li>
-                        </ul>
+                    <div class="mt-8 p-4 text-center bg-gray-50 rounded-lg text-sm text-gray-600">
+                        <p class="font-medium text-gray-700">참여 상태 범례:</p>
+                        <p><span class="inline-block px-2" style="color: var(--primary-green);">● 동참</span>: 포럼의 취지에 공감하고 적극적으로 활동에 참여하고 있는 기관</p>
+                        <p><span class="inline-block px-2 text-red-500">● 가입</span>: 포럼에 정식으로 가입하여 활동 기반을 마련한 기관</p>
+                        <p><span class="inline-block px-2 text-yellow-600">● 진행중</span>: 참여 절차를 논의 및 진행 중인 기관</p>
                     </div>
                 </div>
-            </section>
-            
-            <!-- 3. 정관 요약 -->
-            <section class="p-8 bg-white rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold color-primary mb-8 section-header">
-                    사단법인 자연치유관광포럼 정관 요약
-                </h2>
-                <div class="space-y-4">
-                    <div class="border-l-4 border-accent pl-4">
-                        <h4 class="font-bold text-lg color-primary mb-1">목적 및 사업</h4>
-                        <p class="text-sm text-gray-600">힐링 프로그램 개발, 교육 및 커뮤니티 지원을 통한 자연치유 관광진흥. 수익은 공익을 위해 사용하며, 특정 회원에게 이익이 귀속되지 않음.</p>
-                    </div>
-                    <div class="border-l-4 border-accent pl-4">
-                        <h4 class="font-bold text-lg color-primary mb-1">재산 및 회계</h4>
-                        <p class="text-sm text-gray-600">재산은 기본재산과 운영재산으로 구분. 연간 기부금 모금액 및 활용실적은 홈페이지를 통해 투명하게 공개함.</p>
-                    </div>
-                    <div class="border-l-4 border-accent pl-4">
-                        <h4 class="font-bold text-lg color-primary mb-1">해산 및 잔여재산</h4>
-                        <p class="text-sm text-gray-600">해산 시 잔여재산은 국가, 지방자치단체 또는 유사 목적의 비영리법인에게 귀속됨.</p>
-                    </div>
-                </div>
-            </section>
+                <!-- End of 6. 참여기관 -->
 
+            </div>
+        </section>
+
+
+    <!-- ============================================== -->
+    <!-- PAGE: 2. 힐링포럼 (Forum) -->
+    <!-- ============================================== -->
+    <section id="page-forum" class="page-section">
+        
+        <!-- Hero Section for Forum -->
+        <div class="relative bg-[#0F4C3A] py-24 text-white overflow-hidden shadow-2xl">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/clean-textile.png')]"></div>
+            <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+                <span class="inline-block py-2 px-4 border-2 border-[#C5A065] text-[#C5A065] rounded-full text-sm font-semibold mb-6 tracking-wider">GUIDING THE FUTURE OF WELLNESS</span>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 serif-font leading-tight">대한민국 치유 웰니스의<br>통합적 방향을 제시합니다</h2>
+                <p class="text-xl text-gray-200 font-light max-w-2xl mx-auto leading-relaxed">
+                    의료, 관광, 지역사회를 잇는 전문가들이 모여,<br>
+                    국민 건강 증진에 실질적으로 기여할 수 있는 방법을 논의합니다.
+                </p>
+            </div>
         </div>
 
-    </main>
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <div class="text-center section-title-line">
+                <h3 class="text-3xl font-bold mb-3 serif-font" style="color: var(--primary-green);">포럼의 3대 핵심 역할</h3>
+                <p class="text-gray-600">지식 공유를 넘어, 실천적인 결과물을 창출합니다.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-10 mt-12">
+                <!-- Role 1 -->
+                <div class="text-center p-6 bg-white rounded-xl shadow-lg border-t-8" style="border-color: var(--primary-green);">
+                    <div class="w-16 h-16 bg-green-100 text-3xl rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner" style="color: var(--primary-green);">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-3 serif-font">학술 연구 및 표준 제시</h4>
+                    <p class="text-gray-600 leading-7">통합의학 기반의 과학적 근거를 바탕으로 자연치유 프로그램의 표준 모델을 연구하고 제시합니다.</p>
+                </div>
+                <!-- Role 2 -->
+                <div class="text-center p-6 bg-white rounded-xl shadow-lg border-t-8" style="border-color: var(--accent-gold);">
+                    <div class="w-16 h-16 bg-yellow-100 text-3xl rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner" style="color: var(--accent-gold);">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-3 serif-font">네트워크 및 교류 증진</h4>
+                    <p class="text-gray-600 leading-7">의료, 관광, 지역 전문가 간의 유기적인 협력 체계를 구축하여 산업 시너지를 극대화합니다.</p>
+                </div>
+                <!-- Role 3 -->
+                <div class="text-center p-6 bg-white rounded-xl shadow-lg border-t-8" style="border-color: #3B82F6;">
+                    <div class="w-16 h-16 bg-blue-100 text-3xl rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner" style="color: #3B82F6;">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-3 serif-font">지역 사회 기여 및 보급</h4>
+                    <p class="text-gray-600 leading-7">연구 결과를 바탕으로 아파트 커뮤니티 등 생활 밀착형 힐링 프로그램을 보급하여 국민 건강에 기여합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================== -->
+    <!-- PAGE: 3. 힐링스토리 (Story - 오정법) -->
+    <!-- ============================================== -->
+    <section id="page-story" class="page-section max-w-7xl mx-auto px-4 py-16">
+        
+        <div class="text-center section-title-line">
+            <h2 class="text-4xl font-extrabold mb-3 serif-font" style="color: var(--primary-green);">자연치유 핵심 프로그램: 오정법(五正法)</h2>
+            <p class="text-lg text-gray-600">몸과 마음, 삶의 균형을 되찾는 5가지 올바른 치유의 원칙</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-6 mb-20">
+            <!-- Cards for 5 正法 -->
+            <div class="program-card bg-white p-6 rounded-xl shadow-lg border-b-4 border-green-500 text-center hover:shadow-xl transition duration-300">
+                <div class="text-4xl mb-4 text-green-500">🥗</div>
+                <h3 class="text-xl font-bold mb-2">정식 (正食)</h3>
+                <p class="text-sm text-gray-500">체질별 맞춤 식단<br>및 메디푸드 처방</p>
+            </div>
+            <div class="program-card bg-white p-6 rounded-xl shadow-lg border-b-4 border-blue-500 text-center hover:shadow-xl transition duration-300">
+                <div class="text-4xl mb-4 text-blue-500">🚶‍♂️</div>
+                <h3 class="text-xl font-bold mb-2">정동 (正動)</h3>
+                <p class="text-sm text-gray-500">올바른 자세와<br>신체 균형 회복</p>
+            </div>
+            <div class="program-card bg-white p-6 rounded-xl shadow-lg border-b-4 border-indigo-500 text-center hover:shadow-xl transition duration-300">
+                <div class="text-4xl mb-4 text-indigo-500">😴</div>
+                <h3 class="text-xl font-bold mb-2">정면 (正眠)</h3>
+                <p class="text-sm text-gray-500">수면 패턴 분석 및<br>최적의 수면 환경</p>
+            </div>
+            <div class="program-card bg-white p-6 rounded-xl shadow-lg border-b-4 border-teal-500 text-center hover:shadow-xl transition duration-300">
+                <div class="text-4xl mb-4 text-teal-500">🧘‍♀️</div>
+                <h3 class="text-xl font-bold mb-2">정식 (正息)</h3>
+                <p class="text-sm text-gray-500">호흡법 및 명상을 통한<br>자율신경계 안정</p>
+            </div>
+            <div class="program-card bg-white p-6 rounded-xl shadow-lg border-b-4 border-pink-500 text-center hover:shadow-xl transition duration-300">
+                <div class="text-4xl mb-4 text-pink-500">🧠</div>
+                <h3 class="text-xl font-bold mb-2">정심 (正心)</h3>
+                <p class="text-sm text-gray-500">긍정적 사고 습관<br>및 스트레스 관리</p>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto">
+            <h3 class="text-3xl font-bold mb-8 border-l-4 pl-4" style="border-color: var(--accent-gold); color: var(--primary-green);">주요 활동 사진</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <div class="bg-white rounded-lg overflow-hidden shadow-xl group cursor-pointer border border-gray-100">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1517404215738-ee253aa7a496?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Conference" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs font-bold uppercase tracking-wider" style="color: var(--accent-gold);">2023.11</span>
+                        <h4 class="text-lg font-bold mt-1 mb-1 text-gray-800">국제 통합의학 컨퍼런스</h4>
+                        <p class="text-sm text-gray-600">힐링 관광 트렌드와 통합 치유의 미래 논의</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg overflow-hidden shadow-xl group cursor-pointer border border-gray-100">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1544367563-12123d8965cd?q=80&w=2831&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Education" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs font-bold uppercase tracking-wider" style="color: var(--accent-gold);">2024.03</span>
+                        <h4 class="text-lg font-bold mt-1 mb-1 text-gray-800">제12기 힐링 지도자 교육</h4>
+                        <p class="text-sm text-gray-600">오정법 기반의 전문가 양성 프로그램</p>
+                    </div>
+                </div>
+                 
+                <div class="bg-white rounded-lg overflow-hidden shadow-xl group cursor-pointer border border-gray-100">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1627992928114-1f95d85c8f84?q=80&w=2832&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Community" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs font-bold uppercase tracking-wider" style="color: var(--accent-gold);">Ongoing</span>
+                        <h4 class="text-lg font-bold mt-1 mb-1 text-gray-800">아파트 커뮤니티 힐링 보급</h4>
+                        <p class="text-sm text-gray-600">도심 속 생활 치유 공간 조성 프로젝트</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PAGE: 4. 연락처 (Contact) -->
+    <!-- ============================================== -->
+    <section id="page-contact" class="page-section max-w-7xl mx-auto px-4 py-16">
+        <div class="text-center section-title-line">
+            <h2 class="text-4xl font-extrabold mb-3 serif-font" style="color: var(--primary-green);">포럼 문의 및 연락처</h2>
+            <p class="text-lg text-gray-600">자연치유관광포럼에 대한 궁금증을 해결해 드립니다.</p>
+        </div>
+
+        <div class="bg-white p-8 md:p-12 rounded-xl shadow-xl max-w-4xl mx-auto border border-gray-100">
+            <div class="grid md:grid-cols-2 gap-8 text-center">
+                
+                <div class="p-6 rounded-lg bg-green-50">
+                    <i class="fas fa-map-marker-alt text-4xl mb-4" style="color: var(--accent-gold);"></i>
+                    <h4 class="text-xl font-bold mb-2 text-gray-800">주소</h4>
+                    <p class="text-gray-600">
+                        서울특별시 중구 을지로 14길8 을지재단빌딩, 6층
+                    </p>
+                </div>
+
+                <div class="p-6 rounded-lg bg-green-50">
+                    <i class="fas fa-phone-alt text-4xl mb-4" style="color: var(--accent-gold);"></i>
+                    <h4 class="text-xl font-bold mb-2 text-gray-800">연락처</h4>
+                    <p class="text-gray-600">
+                        대표전화: 010-5328-4154<br>
+                        이메일: tda911@naver.com
+                    </p>
+                </div>
+            </div>
+
+            <!-- Simple Contact Form (JavaScript mailto handler) -->
+            <div class="mt-10 pt-8 border-t border-gray-200">
+                <h4 class="text-2xl font-bold mb-6 text-center" style="color: var(--primary-green);">온라인 문의</h4>
+                
+                <!-- 문의 양식: onsubmit="sendEmail(event)" 함수 호출 -->
+                <form id="contact-form" onsubmit="sendEmail(event)" class="space-y-6">
+                    
+                    <!-- 1. 성함 -->
+                    <div>
+                        <input 
+                            type="text" 
+                            name="성함" 
+                            id="name-input"
+                            placeholder="성함" 
+                            required 
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-transparent transition"
+                        >
+                    </div>
+                    
+                    <!-- 2. 이메일 주소 -->
+                    <div>
+                        <input 
+                            type="email" 
+                            name="이메일 주소" 
+                            id="email-input"
+                            placeholder="답변 받을 이메일 주소" 
+                            required 
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-transparent transition"
+                        >
+                    </div>
+                    
+                    <!-- 3. 문의 내용 -->
+                    <div>
+                        <textarea 
+                            rows="5" 
+                            name="문의 내용" 
+                            id="message-input"
+                            placeholder="문의 내용을 상세하게 작성해 주세요." 
+                            required 
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0F4C3A] focus:border-transparent transition resize-none"
+                        ></textarea>
+                    </div>
+                    
+                    <!-- 4. 제출 버튼 -->
+                    <button 
+                        type="submit" 
+                        class="w-full py-3 rounded-lg text-white font-bold text-lg shadow-md hover:opacity-90 transition duration-300" 
+                        style="background-color: var(--primary-green);"
+                    >
+                        문의 보내기
+                    </button>
+
+                    <!-- 이메일 전송 상태 알림 -->
+                    <p id="email-status" class="text-center text-sm font-medium text-red-500 pt-2" style="opacity: 0; transition: opacity 0.3s;">
+                        ⚠️ 메일 앱이 실행되지 않으면, 내용을 복사하여 직접 메일을 보내주세요.
+                    </p>
+                    
+                    <p class="text-center text-sm text-gray-500 pt-2">
+                        * 버튼 클릭 시, 사용자 PC의 기본 이메일 클라이언트가 열립니다.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
 
     <!-- Footer -->
-    <footer class="bg-gray-700 text-white py-6 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
-            <p class="mb-2">
-                Copyright© (사)자연치유관광포럼. All Rights Reserved.
-            </p>
+    <footer class="bg-gray-800 text-white py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
+            <div class="md:col-span-1">
+                <h4 class="text-xl font-bold mb-4 serif-font">사단법인 자연치유관광포럼</h4>
+                <p class="text-gray-400 text-sm mb-2">문화체육관광부 소관 비영리법인 (제2013-25호)</p>
+            </div>
+            <div class="md:col-span-1">
+                <p class="text-gray-400 text-sm mb-2">주소: 서울시 중구 을지로 14길8 을지재단빌딩, 6층</p>
+                <p class="text-gray-400 text-sm">이사장: 전세일</p>
+            </div>
+            <div class="md:col-span-1 md:text-right">
+                <p class="text-gray-400 text-sm">연락처: 010-5328-4154</p>
+                <p class="text-gray-400 text-sm">이메일: tda911@naver.com</p>
+                <p class="text-gray-500 text-xs mt-4">Copyright © Nature Healing Tourism Forum. All Rights Reserved.</p>
+            </div>
         </div>
     </footer>
 
-    <!-- JavaScript for Page Switching and Mobile Menu -->
+    
     <script>
+        // Main Page Switching
+        function switchPage(pageName) {
+            // Update Navigation Active State
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Show selected page
+            const pageId = 'page-' + pageName;
+            const navId = 'nav-' + pageName;
+            
+            const targetPage = document.getElementById(pageId);
+            const targetNav = document.getElementById(navId);
+
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            if (targetNav) {
+                targetNav.classList.add('active');
+            }
+
+            // Special handling for 'about' page to ensure the correct sub-tab is loaded
+            if (pageName === 'about') {
+                // Only switch sub-tab if the page was previously inactive or being initialized
+                switchSubTab('founding');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Sub-tab Switching (About Page)
+        function switchSubTab(tabName) {
+            // Update Tab Active State
+            document.querySelectorAll('.sub-tab-btn').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            const targetTab = document.getElementById('tab-' + tabName);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+
+            // Show Content
+            document.querySelectorAll('.sub-content').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            const targetContent = document.getElementById('content-' + tabName);
+            if (targetContent) {
+                targetContent.classList.remove('hidden');
+            }
+        }
+
+        // Initialize: Set '포럼 소개' as the default active page on load
         document.addEventListener('DOMContentLoaded', () => {
-            const navButtons = document.querySelectorAll('.nav-link-btn');
-            const pageContents = document.querySelectorAll('.page-content');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const menuButton = document.getElementById('menu-button');
-
-            // Function to handle page switching
-            function showPage(pageId) {
-                // Deactivate all pages and links
-                pageContents.forEach(page => {
-                    page.classList.remove('active');
-                });
-                navButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                });
-
-                // Activate the selected page and link
-                const selectedPage = document.getElementById(pageId);
-                if (selectedPage) {
-                    selectedPage.classList.add('active');
-                }
-                document.querySelector(`.nav-link-btn[data-page="${pageId}"]`).classList.add('active');
-
-                // Close mobile menu if open
-                if (!mobileMenu.classList.contains('hidden')) {
-                     mobileMenu.classList.add('hidden');
-                }
-                
-                // Scroll to top of the main content
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-
-            // Event listener for navigation buttons
-            navButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const pageId = e.currentTarget.getAttribute('data-page');
-                    showPage(pageId);
-                });
-            });
-
-            // Mobile menu toggle
-            menuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-
-            // Initialize: Set the first page as active on load
-            if (pageContents.length > 0) {
-                showPage('page1');
-            }
+            switchPage('about'); 
         });
+
+        function sendEmail(event) {
+            // 폼의 기본 제출 동작을 막습니다.
+            event.preventDefault();
+
+            const name = document.getElementById('name-input').value;
+            const email = document.getElementById('email-input').value;
+            const message = document.getElementById('message-input').value;
+            const statusElement = document.getElementById('email-status');
+
+            // 입력 필드가 비어 있는지 다시 한번 확인
+            if (!name || !email || !message) {
+                // 비어있는 필드가 있다면 사용자에게 알리고 함수 종료
+                console.error("Please fill in all required fields.");
+                return; 
+            }
+
+            // 이메일 본문 내용 포맷
+            const bodyContent = 
+                "성함: " + name + "\n" +
+                "이메일 주소: " + email + "\n\n" +
+                "문의 내용:\n" + message;
+
+            // subject는 문의 내용의 첫 부분을 사용합니다.
+            const subject = "온라인 문의: " + message.substring(0, 30) + (message.length > 30 ? '...' : '');
+
+            const mailtoLink = "mailto:tda911@naver.com" + 
+                            "?subject=" + encodeURIComponent(subject) + 
+                            "&body=" + encodeURIComponent(bodyContent);
+
+            // [수정된 부분]: window.open 대신 window.location.href를 사용하여 현재 창에서 mailto 링크 실행을 시도
+            window.location.href = mailtoLink;
+
+            // 알림 메시지 표시 (메일 클라이언트 실행 여부와 무관하게 사용자에게 안내)
+            statusElement.style.opacity = '1';
+            statusElement.classList.add('show');
+            
+            // 5초 후 알림 메시지를 숨깁니다.
+            setTimeout(() => {
+                statusElement.style.opacity = '0';
+                statusElement.classList.remove('show');
+            }, 5000);
+        }
     </script>
 </body>
 </html>
