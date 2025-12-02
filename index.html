@@ -1181,7 +1181,7 @@
                         <h1 class="text-3xl md:text-5xl font-bold mb-4 md:mb-6 serif-font">
                             <!-- 모바일에서 글자가 넘치지 않도록 text-3xl, md:text-5xl로 조정 -->
                             통합의학 선구자,<br>
-                            전세일 이사장의 치유 철학
+                            전세일 박사의 치유 철학
                         </h1>
                         <p class="text-base md:text-xl mb-4 md:mb-6 leading-relaxed opacity-90">
                             <!-- 모바일에서 폰트 크기 조정 -->
@@ -1212,73 +1212,77 @@
                     </p>
                 </div>
 
-                <!-- 오정법 다이어그램 -->
-                <div class="max-w-4xl mx-auto mb-16">
+                <!-- ============================================== -->
+                <!-- 오정법 다이어그램 (수정됨: 원 삭제 및 3-2 배치) -->
+                <!-- ============================================== -->
+                <div class="max-w-5xl mx-auto my-16 p-4">
+                    <h3 class="text-3xl font-bold text-center mb-10 serif-font" style="color: var(--primary-green);">
+                        오정법 (五正法) 치유 철학
+                    </h3>
+                    
                     <div class="relative">
-                        <!-- 중앙 원 -->
-                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                                    w-48 h-48 bg-gradient-to-br from-[#0F4C3A] to-[#1a6b52] 
-                                    rounded-full flex items-center justify-center shadow-2xl z-10">
-                            <div class="text-center text-white">
-                                <div class="text-3xl font-bold serif-font mb-2">오정법</div>
-                                <div class="text-sm">五正法</div>
-                            </div>
-                        </div>
-
-                        <!-- 5개 원형 배치 -->
-                        <div class="grid grid-cols-5 gap-4 pt-32">
-                            <!-- 정심 -->
-                            <div class="text-center">
-                                <div class="w-32 h-32 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                    <i class="fas fa-heart text-4xl text-red-500"></i>
+                        
+                        <!-- 
+                            5개 원형 배치 
+                            - 모바일: grid-cols-6 사용
+                            - 첫 3개 아이콘: col-span-2 (3개 나열)
+                            - 뒤 2개 아이콘: col-span-3 (2개 나열)
+                            - 데스크톱: md:grid-cols-5, md:col-span-1 (5개 나열)
+                        -->
+                        <div class="grid grid-cols-6 gap-4 md:gap-6 md:grid-cols-5">
+                            
+                            <!-- 1. 정심 (모바일: 1/3 너비) -->
+                            <div class="col-span-2 md:col-span-1 text-center p-2">
+                                <div class="w-24 h-24 sm:w-32 sm:h-32 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg ring-4 ring-red-200 transition-transform hover:scale-105">
+                                    <i class="fas fa-heart text-3xl sm:text-4xl text-red-500"></i>
                                 </div>
-                                <h3 class="font-bold text-lg mb-2">정심 正心</h3>
-                                <p class="text-sm text-gray-600">제대로<br>마음쓰기</p>
+                                <h3 class="font-bold text-lg mb-1 text-gray-800">정심 正心</h3>
+                                <p class="text-sm text-gray-600 leading-tight">제대로<br>마음쓰기</p>
                             </div>
 
-                            <!-- 정식 -->
-                            <div class="text-center">
-                                <div class="w-32 h-32 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                    <i class="fas fa-wind text-4xl text-blue-500"></i>
+                            <!-- 2. 정식 (모바일: 1/3 너비) -->
+                            <div class="col-span-2 md:col-span-1 text-center p-2">
+                                <div class="w-24 h-24 sm:w-32 sm:h-32 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg ring-4 ring-blue-200 transition-transform hover:scale-105">
+                                    <i class="fas fa-wind text-3xl sm:text-4xl text-blue-500"></i>
                                 </div>
-                                <h3 class="font-bold text-lg mb-2">정식 正息</h3>
-                                <p class="text-sm text-gray-600">제대로<br>숨쉬기</p>
+                                <h3 class="font-bold text-lg mb-1 text-gray-800">정식 正息</h3>
+                                <p class="text-sm text-gray-600 leading-tight">제대로<br>숨쉬기</p>
                             </div>
 
-                            <!-- 정동 -->
-                            <div class="text-center">
-                                <div class="w-32 h-32 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                    <i class="fas fa-running text-4xl text-green-500"></i>
+                            <!-- 3. 정동 (모바일: 1/3 너비) -->
+                            <div class="col-span-2 md:col-span-1 text-center p-2">
+                                <div class="w-24 h-24 sm:w-32 sm:h-32 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg ring-4 ring-green-200 transition-transform hover:scale-105">
+                                    <i class="fas fa-running text-3xl sm:text-4xl text-green-500"></i>
                                 </div>
-                                <h3 class="font-bold text-lg mb-2">정동 正動</h3>
-                                <p class="text-sm text-gray-600">제대로<br>움직이기</p>
+                                <h3 class="font-bold text-lg mb-1 text-gray-800">정동 正動</h3>
+                                <p class="text-sm text-gray-600 leading-tight">제대로<br>움직이기</p>
                             </div>
 
-                            <!-- 정양 -->
-                            <div class="text-center">
-                                <div class="w-32 h-32 bg-yellow-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                    <i class="fas fa-apple-alt text-4xl text-yellow-600"></i>
+                            <!-- 4. 정양 (모바일: 1/2 너비) -->
+                            <div class="col-span-3 md:col-span-1 text-center p-2">
+                                <div class="w-24 h-24 sm:w-32 sm:h-32 bg-yellow-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg ring-4 ring-yellow-200 transition-transform hover:scale-105">
+                                    <i class="fas fa-apple-alt text-3xl sm:text-4xl text-yellow-600"></i>
                                 </div>
-                                <h3 class="font-bold text-lg mb-2">정양 正養</h3>
-                                <p class="text-sm text-gray-600">제대로<br>먹기</p>
+                                <h3 class="font-bold text-lg mb-1 text-gray-800">정양 正養</h3>
+                                <p class="text-sm text-gray-600 leading-tight">제대로<br>먹기</p>
                             </div>
 
-                            <!-- 정면 -->
-                            <div class="text-center">
-                                <div class="w-32 h-32 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                    <i class="fas fa-moon text-4xl text-purple-500"></i>
+                            <!-- 5. 정면 (모바일: 1/2 너비) -->
+                            <div class="col-span-3 md:col-span-1 text-center p-2">
+                                <div class="w-24 h-24 sm:w-32 sm:h-32 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg ring-4 ring-purple-200 transition-transform hover:scale-105">
+                                    <i class="fas fa-moon text-3xl sm:text-4xl text-purple-500"></i>
                                 </div>
-                                <h3 class="font-bold text-lg mb-2">정면 正眠</h3>
-                                <p class="text-sm text-gray-600">제대로<br>잠자기</p>
+                                <h3 class="font-bold text-lg mb-1 text-gray-800">정면 正眠</h3>
+                                <p class="text-sm text-gray-600 leading-tight">제대로<br>잠자기</p>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- 오정법 다이어그램 끝 -->
 
                 <div class="text-center">
                     <p class="text-lg text-gray-700 italic">
-                        <strong>"정심(마음)–정식(호흡)–정동(움직임)–정양(영양)–정면(수면)의</strong><br>
-                        다섯 축을 삶 속에서 바로잡아, 자연치유력을 끌어올리는 회복 프레임입니다."
+                        <strong>"정심(마음)–정식(호흡)–정동(움직임)–정양(영양)–정면(수면)의</strong> 다섯 축을 삶 속에서 바로잡아, 자연치유력을 끌어올리는 회복 프레임입니다."
                     </p>
                 </div>
             </div>
@@ -1288,7 +1292,7 @@
         <div class="py-20 bg-gray-50">
             <div class="container mx-auto px-6">
                 <h2 class="text-4xl font-bold text-center mb-16 serif-font text-[#0F4C3A]">
-                    오정법 대표 프로그램
+                    대표 프로그램
                 </h2>
 
                 <div class="max-w-6xl mx-auto space-y-6">
@@ -1404,7 +1408,7 @@
 
                 <div class="text-center mt-12">
                     <p class="text-lg text-gray-700 font-semibold">
-                        모든 힐링캠프·교육·체험 프로그램은 이 5가지 축이 균형을 이루도록 설계됩니다.
+                        모든 힐링캠프·교육·체험 프로그램은<br>이 5가지 축이 균형을 이루도록 설계됩니다.
                     </p>
                 </div>
             </div>
@@ -1477,7 +1481,7 @@
         <div class="py-20 bg-gray-50">
             <div class="container mx-auto px-6">
                 <h2 class="text-4xl font-bold text-center mb-16 serif-font text-[#0F4C3A]">
-                    힐링캠프, 이렇게 진행됩니다
+                    힐링캠프,<br>이렇게 진행됩니다
                 </h2>
 
                 <div class="max-w-4xl mx-auto">
@@ -1879,3 +1883,4 @@
     </script>
 </body>
 </html>
+
