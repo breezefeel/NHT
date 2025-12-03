@@ -1685,12 +1685,69 @@
             <p class="text-lg text-gray-600">자연치유관광포럼에 대한 궁금증을 해결해 드립니다.</p>
         </div>
 
+    <!-- 사무처 조직 구성 (깔끔한 카드 리스트 형태) -->
+        <div class="max-w-4xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-2xl border border-gray-100 mt-10">            
+            <p class="text-center text-gray-500 mb-10">자연치유관광포럼의 핵심 운영 조직</p>
+
+            <!-- Clean, stacked/grid organization listing -->
+            <!-- 변경: 모바일에서도 2열 레이아웃을 시작할 수 있도록 grid-cols-1 sm:grid-cols-2 적용 -->
+            <div class="space-y-6 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 sm:space-y-0">
+                
+                <!-- 1. 사무총장 (Secretary General) - Key Role -->
+                <!-- col-span-full을 사용하여 항상 전체 너비를 차지하도록 함 -->
+                <div class="col-span-full bg-green-50 p-6 rounded-xl border-l-4 border-green-700 shadow-lg flex flex-col sm:flex-row items-center sm:justify-between transition hover:shadow-xl">
+                    <div class="flex items-center mb-3 sm:mb-0">
+                        <i class="fas fa-crown text-3xl text-green-700 mr-4"></i>
+                        <div class="text-left">
+                            <p class="text-xl font-bold text-green-800">사무총장</p>
+                            <p class="text-sm text-gray-600">Secretary General</p>
+                        </div>
+                    </div>
+                    <p class="text-2xl font-extrabold text-green-900">송기복</p>
+                </div>
+
+                <!-- 2. 사무국장 (Office Director) - Secondary Key Role -->
+                <!-- col-span-full을 사용하여 항상 전체 너비를 차지하도록 함 -->
+                <div class="col-span-full bg-yellow-50 p-6 rounded-xl border-l-4 border-yellow-600 shadow-md flex flex-col sm:flex-row items-center sm:justify-between transition hover:shadow-lg">
+                    <div class="flex items-center mb-3 sm:mb-0">
+                        <i class="fas fa-sitemap text-3xl text-yellow-700 mr-4"></i>
+                        <div class="text-left">
+                            <p class="text-xl font-bold text-yellow-800">사무국장</p>
+                            <p class="text-sm text-gray-600">Office Director</p>
+                        </div>
+                    </div>
+                    <p class="text-2xl font-extrabold text-yellow-900">홍인표</p>
+                </div>
+                
+                <!-- 3. 업무팀 (Business Team) - 자동으로 2열 레이아웃의 첫 번째 칸을 차지 -->
+                <div class="p-6 rounded-xl border border-gray-200 bg-white shadow-md hover:shadow-lg transition duration-300">
+                    <div class="text-center">
+                        <i class="fas fa-briefcase text-4xl mb-3 text-blue-600"></i>
+                        <h4 class="text-xl font-bold mb-1 text-gray-800">업무팀</h4>
+                        <p class="text-sm font-medium text-blue-700">Business & Planning</p>
+                        <p class="mt-4 text-xl font-semibold text-gray-700">박찬수 전문위원</p>
+                    </div>
+                </div>
+
+                <!-- 4. 교육팀 (Education Team) - 자동으로 2열 레이아웃의 두 번째 칸을 차지 -->
+                <div class="p-6 rounded-xl border border-gray-200 bg-white shadow-md hover:shadow-lg transition duration-300">
+                    <div class="text-center">
+                        <i class="fas fa-graduation-cap text-4xl mb-3 text-red-600"></i>
+                        <h4 class="text-xl font-bold mb-1 text-gray-800">교육팀</h4>
+                        <p class="text-sm font-medium text-red-700">Education & Training</p>
+                        <p class="mt-4 text-xl font-semibold text-gray-700">윤수연 전문위원</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: 사무처 조직 구성 -->
+
         <div class="bg-white p-8 md:p-12 rounded-xl shadow-xl max-w-4xl mx-auto border border-gray-100">
             <div class="grid md:grid-cols-2 gap-8 text-center">
                 
                 <div class="p-6 rounded-lg bg-green-50">
                     <i class="fas fa-map-marker-alt text-4xl mb-4" style="color: var(--accent-gold);"></i>
-                    <h4 class="text-xl font-bold mb-2 text-gray-800">주소</h4>
+                    <h4 class="text-xl font-bold mb-2 text-gray-800">사무실 주소</h4>
                     <p class="text-gray-600">
                         서울특별시 중구 을지로 14길8<br>을지재단빌딩, 6층
                     </p>
