@@ -2106,7 +2106,30 @@
                 }, 3000);
             }
         }
-
+        
+        // 페이지 로드 시 URL에 #id가 있으면 해당 섹션을 보여주는 코드
+        window.addEventListener('load', function() {
+            if (window.location.hash) {
+                // 1. URL에서 # 제거한 ID 가져오기 (예: 'page-story')
+                const targetId = window.location.hash.substring(1);
+                const targetElement = document.getElementById(targetId);
+        
+                // 2. 만약 해당 ID를 가진 요소가 있다면
+                if (targetElement) {
+                    // (1) 만약 탭이나 페이지 전환 함수가 있다면 여기서 호출해줘야 합니다.
+                    // 예: showPage('story'); 또는 switchTab('story');
+                    
+                    // (2) 숨겨진 클래스(hidden)가 있다면 제거 (예시)
+                    targetElement.classList.remove('hidden'); 
+                    
+                    // (3) 해당 위치로 스크롤 이동
+                    setTimeout(() => {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }, 300); // 약간의 딜레이 후 이동
+                }
+            }
+        });
+        
         // Initialize: Set '포럼 소개' as the default active page on load
         document.addEventListener('DOMContentLoaded', () => {
             switchPage('about'); 
@@ -2164,6 +2187,7 @@
     </script>
 </body>
 </html>
+
 
 
 
