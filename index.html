@@ -164,6 +164,8 @@
                 <button onclick="switchPage('about')" class="nav-item text-base md:text-lg py-1 flex-shrink-0" id="nav-about">포럼 소개</button>
                 <button onclick="switchPage('forum')" class="nav-item text-base md:text-lg py-1 flex-shrink-0" id="nav-forum">힐링스토리</button>
                 <button onclick="switchPage('story')" class="nav-item text-base md:text-lg py-1 flex-shrink-0" id="nav-story">힐링프로그램</button>
+                <!-- 네비게이션 메뉴에 추가 -->
+                <button onclick="switchPage('column')" class="nav-item text-base md:text-lg py-1 flex-shrink-0" id="nav-column">힐링컬럼</button>
                 <button onclick="switchPage('contact')" class="nav-item text-base md:text-lg py-1 flex-shrink-0" id="nav-contact">연락처</button>
                 <button onclick="switchPage('donation')" class="nav-item text-base md:text-lg py-1 flex-shrink-0" id="nav-donation">기부금활용실적</button>                
             </div>
@@ -1727,6 +1729,33 @@
     </section>
     
     <!-- ============================================== -->
+    <!-- PAGE: 3.5 힐링컬럼 (Column) -->
+    <!-- ============================================== -->
+    <section id="page-column" class="page-section max-w-7xl mx-auto px-4 py-16">
+        <div class="text-center section-title-line">
+            <h2 class="text-4xl font-extrabold mb-3 serif-font" style="color: var(--primary-green);">힐링 컬럼 & 지식 창고</h2>
+            <p class="text-lg text-gray-600">죽음학의 지혜부터 실전 근골격계 치유까지 전문가의 식견을 나눕니다.</p>
+        </div>
+
+        <!-- 1. 임병식 교수님 컬럼 -->
+        <div class="mt-12">
+            <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-green-800">
+                <span class="w-1 h-6 bg-green-600 rounded-full"></span> 죽음학의 지혜 (임병식 이사)
+            </h3>
+            <div id="column-feed" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+        </div>
+
+        <!-- 2. 일반인을 위한 근골격계 힐링 (Practice) -->
+        <div class="mt-20">
+            <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-blue-800">
+                <span class="w-1 h-6 bg-blue-500 rounded-full"></span> 근골격계 이야기 (박준규 이사)
+            </h3>
+            <div id="practice-feed" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+        </div>
+        
+    </section>
+
+    <!-- ============================================== -->
     <!-- PAGE: 4. 연락처 (Contact) -->
     <!-- ============================================== -->
     <section id="page-contact" class="page-section max-w-7xl mx-auto px-4 py-16">
@@ -2196,6 +2225,85 @@
             }, 200);
         });
         
+        async function loadAllFeeds() {
+            const config = {
+                column: {
+                    url: 'https://lifelimits.tistory.com/rss',
+                    containerId: 'column-feed',
+                    tag: '죽음학',
+                    color: 'bg-green-100 text-green-700'
+                },
+                healing: {
+                    // 특정 카테고리 번호 없이 전체 RSS를 불러와 가장 확실하게 작동합니다.
+                    url: 'https://rss.blog.naver.com/allenjoy.xml', 
+                    containerId: 'practice-feed', // 기존 practice-feed 영역 사용
+                    tag: '근골격계 이야기',
+                    color: 'bg-amber-100 text-amber-700'
+                }
+            };
+
+            // 1. 임병식 박사님 죽음학 컬럼 로드
+            await fetchAndRender(config.column);
+
+            // 2. 힐링트리 근골격계 최신글 로드
+            await fetchAndRender(config.healing);
+        }
+
+        async function fetchAndRender(section) {
+            const container = document.getElementById(section.containerId);
+            if (!container) return;
+
+            try {
+                // 캐시 방지를 위해 시간 파라미터 추가
+                const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(section.url)}&t=${Date.now()}`;
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    container.innerHTML = '';
+                    // 최신글 3개만 추출
+                    data.items.slice(0, 3).forEach((item, index) => {
+                        renderPostCard(container, item, index, section);
+                    });
+                }
+            } catch (e) {
+                console.error(section.tag + " 로드 실패", e);
+            }
+        }
+
+        function renderPostCard(container, item, index, section) {
+            const pubDate = new Date(item.pubDate).toLocaleDateString('ko-KR');
+            const description = item.description.replace(/<[^>]*>?/gm, '').substring(0, 70) + '...';
+            
+            let displayImage = item.thumbnail;
+            if (!displayImage && item.content) {
+                const imgMatch = item.content.match(/<img[^>]+src="([^">]+)"/);
+                if (imgMatch) displayImage = imgMatch[1];
+            }
+            if (!displayImage) {
+                displayImage = `https://loremflickr.com/600/400/health,nature?lock=${index + Math.random()}`;
+            }
+
+            container.innerHTML += `
+                <a href="${item.link}" target="_blank" class="block no-underline">
+                    <article class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition duration-300 flex flex-col h-full cursor-pointer group">
+                        <div class="h-44 overflow-hidden bg-gray-50">
+                            <img src="${displayImage}" alt="${item.title}" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500" onerror="this.src='https://breezefeel.github.io/NHT/photo1.avif'">
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="${section.color} text-[10px] font-bold px-2 py-0.5 rounded">${section.tag}</span>
+                                <span class="text-gray-400 text-[11px]">${pubDate}</span>
+                            </div>
+                            <h4 class="text-md font-bold mb-2 text-gray-800 line-clamp-2 serif-font group-hover:text-green-700 transition-colors">${item.title}</h4>
+                            <p class="text-gray-600 text-xs mb-4 line-clamp-3 leading-relaxed">${description}</p>
+                            <div class="mt-auto text-[#C5A065] font-bold text-[11px]">전문 보기 →</div>
+                        </div>
+                    </article>
+                </a>`;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAllFeeds);
     </script>
 </body>
 </html>
