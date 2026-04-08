@@ -2231,130 +2231,86 @@
                     url: 'https://lifelimits.tistory.com/rss',
                     containerId: 'column-feed',
                     tag: '죽음학',
-                    color: 'bg-green-100 text-green-700'
-                },
-                healing: {
-                    // 특정 카테고리 번호 없이 전체 RSS를 불러와 가장 확실하게 작동합니다.
-                    url: 'https://rss.blog.naver.com/allenjoy.xml', 
-                    containerId: 'practice-feed', // 기존 practice-feed 영역 사용
-                    tag: '근골격계 이야기',
-                    color: 'bg-amber-100 text-amber-700'
-                }
-            };
-
-            // 1. 임병식 박사님 죽음학 컬럼 로드
-            await fetchAndRender(config.column);
-
-            // 2. 힐링트리 근골격계 최신글 로드
-            await fetchAndRender(config.healing);
-        }
-
-        async function loadAllFeeds() {
-            const config = {
-                column: {
-                    url: 'https://lifelimits.tistory.com/rss',
-                    containerId: 'column-feed',
-                    tag: '죽음학',
-                    color: 'bg-green-100 text-green-700'
+                    color: 'bg-green-100 text-green-700',
+                    keyword: 'mountain,forest'
                 },
                 healing: {
                     url: 'https://rss.blog.naver.com/allenjoy.xml', 
                     containerId: 'practice-feed',
                     tag: '근골격계 이야기',
-                    color: 'bg-amber-100 text-amber-700'
+                    color: 'bg-amber-100 text-amber-700',
+                    keyword: 'yoga,spine'
                 }
             };
-        
+
             await fetchAndRender(config.column);
             await fetchAndRender(config.healing);
         }
-        
-        async function loadAllFeeds() {
-    const config = {
-        column: {
-            url: 'https://lifelimits.tistory.com/rss',
-            containerId: 'column-feed',
-            tag: '죽음학',
-            color: 'bg-green-100 text-green-700',
-            keyword: 'nature,forest' // 지혜/성찰 느낌의 키워드
-        },
-        healing: {
-            url: 'https://rss.blog.naver.com/allenjoy.xml', 
-            containerId: 'practice-feed',
-            tag: '근골격계 이야기',
-            color: 'bg-amber-100 text-amber-700',
-            keyword: 'health,zen' // 건강/치유 느낌의 키워드
+
+        async function fetchAndRender(section) {
+            const container = document.getElementById(section.containerId);
+            if (!container) return;
+
+            try {
+                const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(section.url)}&t=${Date.now()}`;
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    container.innerHTML = '';
+                    data.items.slice(0, 3).forEach((item, index) => {
+                        renderPostCard(container, item, index, section);
+                    });
+                }
+            } catch (e) {
+                console.error(section.tag + " 로드 실패", e);
+            }
         }
-    };
 
-    await fetchAndRender(config.column);
-    await fetchAndRender(config.healing);
-}
+        function renderPostCard(container, item, index, section) {
+            const pubDate = new Date(item.pubDate).toLocaleDateString('ko-KR');
+            const description = item.description.replace(/<[^>]*>?/gm, '').substring(0, 65) + '...';
+            
+            // 1. 각 카드마다 고유한 랜덤 이미지 주소 생성 (이미지 로딩 실패 대비용)
+            const randomFallback = `https://picsum.photos/seed/${section.tag}${index}/600/400`;
 
-async function fetchAndRender(section) {
-    const container = document.getElementById(section.containerId);
-    if (!container) return;
+            // 2. 원본 이미지 추출 (이미지 태그나 썸네일 데이터 확인)
+            let displayImage = item.thumbnail || "";
+            if (!displayImage && item.content) {
+                const imgMatch = item.content.match(/<img[^>]+src="([^">]+)"/);
+                if (imgMatch) displayImage = imgMatch[1];
+            }
 
-    try {
-        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(section.url)}&t=${Date.now()}`;
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+            // [중요] 네이버/티스토리 이미지는 우회 주소를 사용하되, 주소가 비어있으면 즉시 랜덤 이미지 할당
+            if (displayImage) {
+                displayImage = `https://images.weserv.nl/?url=${encodeURIComponent(displayImage.replace('http://', 'https://'))}&default=${encodeURIComponent(randomFallback)}`;
+            } else {
+                displayImage = randomFallback;
+            }
 
-        if (data.status === 'ok') {
-            container.innerHTML = '';
-            data.items.slice(0, 3).forEach((item, index) => {
-                renderPostCard(container, item, index, section);
-            });
+            container.innerHTML += `
+                <a href="${item.link}" target="_blank" class="block no-underline">
+                    <article class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition duration-300 flex flex-col h-full cursor-pointer group">
+                        <div class="h-44 overflow-hidden bg-gray-50">
+                            <img src="${displayImage}" 
+                                alt="${item.title}" 
+                                class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500" 
+                                onerror="this.onerror=null; this.src='${randomFallback}';">
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="${section.color} text-[10px] font-bold px-2 py-0.5 rounded">${section.tag}</span>
+                                <span class="text-gray-400 text-[11px]">${pubDate}</span>
+                            </div>
+                            <h4 class="text-md font-bold mb-2 text-gray-800 line-clamp-2 serif-font group-hover:text-green-700 transition-colors">${item.title}</h4>
+                            <p class="text-gray-600 text-xs mb-4 line-clamp-3 leading-relaxed">${description}</p>
+                            <div class="mt-auto text-[#C5A065] font-bold text-[11px]">전문 보기 →</div>
+                        </div>
+                    </article>
+                </a>`;
         }
-    } catch (e) {
-        console.error(section.tag + " 로드 실패", e);
-    }
-}
 
-function renderPostCard(container, item, index, section) {
-    const pubDate = new Date(item.pubDate).toLocaleDateString('ko-KR');
-    const description = item.description.replace(/<[^>]*>?/gm, '').substring(0, 65) + '...';
-    
-    // 1. 블로그 원본 이미지 추출
-    let originalImage = item.thumbnail || "";
-    if (!originalImage && item.content) {
-        const imgMatch = item.content.match(/<img[^>]+src="([^">]+)"/);
-        if (imgMatch) originalImage = imgMatch[1];
-    }
-
-    // 2. 대체 이미지 설정 (Unsplash 활용)
-    // index와 섹션 태그를 조합하여 각 카드마다 절대 겹치지 않는 랜덤 이미지를 생성합니다.
-    const uniqueId = section.tag + index;
-    const randomFallback = `https://source.unsplash.com/featured/600x400?${section.keyword}&sig=${uniqueId}`;
-
-    // 3. 이미지 우회 주소 생성
-    let displayImage = originalImage 
-        ? `https://images.weserv.nl/?url=${encodeURIComponent(originalImage.replace('http://', 'https://'))}`
-        : randomFallback;
-
-    container.innerHTML += `
-        <a href="${item.link}" target="_blank" class="block no-underline">
-            <article class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition duration-300 flex flex-col h-full cursor-pointer group">
-                <div class="h-44 overflow-hidden bg-gray-100">
-                    <img src="${displayImage}" 
-                         alt="${item.title}" 
-                         class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500" 
-                         onerror="this.onerror=null; this.src='${randomFallback}';">
-                </div>
-                <div class="p-5 flex-1 flex flex-col">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="${section.color} text-[10px] font-bold px-2 py-0.5 rounded">${section.tag}</span>
-                        <span class="text-gray-400 text-[11px]">${pubDate}</span>
-                    </div>
-                    <h4 class="text-md font-bold mb-2 text-gray-800 line-clamp-2 serif-font group-hover:text-green-700 transition-colors">${item.title}</h4>
-                    <p class="text-gray-600 text-xs mb-4 line-clamp-3 leading-relaxed">${description}</p>
-                    <div class="mt-auto text-[#C5A065] font-bold text-[11px]">전문 보기 →</div>
-                </div>
-            </article>
-        </a>`;
-}
-
-document.addEventListener('DOMContentLoaded', loadAllFeeds);
+        document.addEventListener('DOMContentLoaded', loadAllFeeds);
     </script>
 </body>
 </html>
